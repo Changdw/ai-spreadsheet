@@ -1,12 +1,14 @@
-# AIB Spreadsheet · A local spreadsheet built for AI
+# AI Spreadsheet · A local spreadsheet built for AI
 
-[中文](README.md) · [![AIB CI](https://github.com/Changdw/aib-spreadsheet/actions/workflows/verify.yml/badge.svg?branch=main)](https://github.com/Changdw/aib-spreadsheet/actions/workflows/verify.yml)
+[中文](README.md) · [![AIB CI](https://github.com/Changdw/ai-spreadsheet/actions/workflows/verify.yml/badge.svg?branch=main)](https://github.com/Changdw/ai-spreadsheet/actions/workflows/verify.yml)
 
 **Double-click a budget and you see cells and formulas. Give the same file to your AI assistant and it sees JSON.** One `.aib` holds the whole workbook. Drag to fill a column, format a price and let the local web editor autosave. Your agent can read just the cells it needs and leave you a draft to review.
 
-[Get the Windows or macOS build](https://github.com/Changdw/aib-spreadsheet/actions/workflows/verify.yml?query=branch%3Amain) · [See the budget as JSON](examples/budget.aib) · [Give your agent the offline guide](skills/aib-workbook/references/en/aib-offline.md)
+**[View the read-only demo](https://changdw.github.io/ai-spreadsheet/en/)** · **[Download for Windows (x64)](https://github.com/Changdw/ai-spreadsheet/releases/latest/download/ai-spreadsheet-windows-x64.zip)** · **[Download for macOS (Apple silicon)](https://github.com/Changdw/ai-spreadsheet/releases/latest/download/ai-spreadsheet-macos-arm64.zip)**
 
-![Monthly budget in the English workbench. Cell D5 shows ¥15,100.00 and the formula bar shows =SUM(D2:D4).](docs/guide/en/workbench.png)
+[![Monthly budget in the English workbench. Cell D5 shows ¥15,100.00 and the formula bar shows =SUM(D2:D4).](docs/guide/en/workbench.png)](https://changdw.github.io/ai-spreadsheet/en/)
+
+[See the budget as JSON](examples/budget.aib) · [Give your agent the offline guide](skills/aib-workbook/references/en/aib-offline.md)
 
 ## Ask your agent to revise a quote
 
@@ -43,7 +45,7 @@ The 53 bytes are the UTF-8 length of the array below. The full CLI response also
 [[1199985,1199986,1199987],[1199997,1199998,1199999]]
 ```
 
-Measured on Windows x64 with an Intel Core i9-14900HX, Node.js 24.22.3 and Edge. [Fixture and calculation script](https://github.com/Changdw/aib-spreadsheet/blob/main/scripts/benchmark.ts) · [Browser timing script](https://github.com/Changdw/aib-spreadsheet/blob/main/scripts/benchmark-ui.ts)
+Measured on Windows x64 with an Intel Core i9-14900HX, Node.js 24.22.3 and Edge. [Fixture and calculation script](https://github.com/Changdw/ai-spreadsheet/blob/main/scripts/benchmark.ts) · [Browser timing script](https://github.com/Changdw/ai-spreadsheet/blob/main/scripts/benchmark-ui.ts)
 
 <details>
 <summary>Reproduce the six-cell read after running npm ci in a source checkout</summary>
@@ -57,7 +59,7 @@ npm run --silent aib -- --offline read .verification/benchmark-values-100000.aib
 
 ## Open your first workbook
 
-Sign in to GitHub, follow the build link above, choose a successful `main` run and download the ZIP for your platform under **Artifacts**. Extract the package.
+Choose your platform above and extract the ZIP. Both downloads work without signing in to GitHub. [Release notes and checksums](https://github.com/Changdw/ai-spreadsheet/releases/latest)
 
 | Platform | One-time setup |
 | --- | --- |

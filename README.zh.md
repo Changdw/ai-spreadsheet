@@ -1,4 +1,4 @@
-# AIB · 中文使用与开发指南
+# AI Spreadsheet · 中文使用与开发指南
 
 [产品首页](README.md) · [English](README.en.md)
 

@@ -974,7 +974,7 @@ test('detects an English browser and passes the language to the picker, HTML and
     await expect(
       page.getByRole('heading', { name: 'Your spreadsheet, in one file.' }),
     ).toBeVisible();
-    await expect(page).toHaveTitle('AIB · Local spreadsheets');
+    await expect(page).toHaveTitle('AI Spreadsheet · Local spreadsheets');
     await page.goto(url);
     await expect(page.locator('#status')).toHaveText('Saved');
     const target = path.join(dir, '空白表.html');

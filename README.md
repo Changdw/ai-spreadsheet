@@ -1,12 +1,14 @@
-# AIB Spreadsheet · 为 AI 设计的本地表格工作台
+# AI Spreadsheet · 为 AI 设计的本地表格工作台
 
-[English](README.en.md) · [中文使用与开发指南](README.zh.md) · [![AIB CI](https://github.com/Changdw/aib-spreadsheet/actions/workflows/verify.yml/badge.svg?branch=main)](https://github.com/Changdw/aib-spreadsheet/actions/workflows/verify.yml)
+[English](README.en.md) · [中文使用与开发指南](README.zh.md) · [![AIB CI](https://github.com/Changdw/ai-spreadsheet/actions/workflows/verify.yml/badge.svg?branch=main)](https://github.com/Changdw/ai-spreadsheet/actions/workflows/verify.yml)
 
 **双击一份预算表，你看到的是单元格和公式。把同一个文件交给 AI，它读到的是 JSON。** 一份 `.aib` 就装下整本工作簿。你可以在本地浏览器里拖动填充、改格式，让工作台自动保存。也可以让自己的 AI 助手只读几格、起草修改，再由你决定是否应用。
 
-[下载 Windows / macOS 便携版](https://github.com/Changdw/aib-spreadsheet/actions/workflows/verify.yml?query=branch%3Amain) · [打开预算样例看 JSON](examples/budget.aib) · [给 AI 的离线指南](skills/aib-workbook/references/zh/aib-offline.md)
+**[查看只读示例](https://changdw.github.io/ai-spreadsheet/)** · **[下载 Windows 版（x64）](https://github.com/Changdw/ai-spreadsheet/releases/latest/download/ai-spreadsheet-windows-x64.zip)** · **[下载 macOS 版（Apple 芯片）](https://github.com/Changdw/ai-spreadsheet/releases/latest/download/ai-spreadsheet-macos-arm64.zip)**
 
-![AIB 中文工作台中的月度预算。选中合计 D5 后，公式栏显示 =SUM(D2:D4)，表内显示 ¥15,100.00。](docs/guide/zh/workbench.png)
+[![AIB 中文工作台中的月度预算。选中合计 D5 后，公式栏显示 =SUM(D2:D4)，表内显示 ¥15,100.00。](docs/guide/zh/workbench.png)](https://changdw.github.io/ai-spreadsheet/)
+
+[查看预算 JSON](examples/budget.aib) · [给 AI 的离线指南](skills/aib-workbook/references/zh/aib-offline.md)
 
 ## 试试让 AI 改一次报价
 
@@ -43,7 +45,7 @@ npm run --silent aib -- --offline draft examples/budget.aib --ops examples/chang
 [[1199985,1199986,1199987],[1199997,1199998,1199999]]
 ```
 
-测试环境为 Windows x64、Intel Core i9-14900HX、Node.js 24.22.3，浏览器使用 Edge。[样表生成与计算脚本](https://github.com/Changdw/aib-spreadsheet/blob/main/scripts/benchmark.ts) · [浏览器计时脚本](https://github.com/Changdw/aib-spreadsheet/blob/main/scripts/benchmark-ui.ts)
+测试环境为 Windows x64、Intel Core i9-14900HX、Node.js 24.22.3，浏览器使用 Edge。[样表生成与计算脚本](https://github.com/Changdw/ai-spreadsheet/blob/main/scripts/benchmark.ts) · [浏览器计时脚本](https://github.com/Changdw/ai-spreadsheet/blob/main/scripts/benchmark-ui.ts)
 
 <details>
 <summary>复现这次六格读取（在源码目录运行 npm ci 后执行）</summary>
@@ -57,7 +59,7 @@ npm run --silent aib -- --offline read .verification/benchmark-values-100000.aib
 
 ## 第一次打开 AIB
 
-登录 GitHub，在上方下载链接选一次成功的 `main` 构建，在 **Artifacts** 下载对应平台的压缩包并解压。
+从上方选择系统对应的 ZIP 并解压。两个安装包都可以直接下载，无需登录 GitHub。[版本说明与校验值](https://github.com/Changdw/ai-spreadsheet/releases/latest)
 
 | 平台 | 首次设置 |
 | --- | --- |
