@@ -44,6 +44,8 @@ if (action === 'stage') {
         'architecture.svg',
         'module-dependencies.mmd',
         'module-dependencies.svg',
+        'workbench.png',
+        'draft-review.png',
         'guide.css',
         'guide.js',
       ].includes(path.basename(file)),

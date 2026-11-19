@@ -48,6 +48,10 @@ try {
     'docs/guide/en/module-dependencies.mmd',
     'docs/guide/zh/module-dependencies.svg',
     'docs/guide/en/module-dependencies.svg',
+    'docs/guide/zh/workbench.png',
+    'docs/guide/en/workbench.png',
+    'docs/guide/zh/draft-review.png',
+    'docs/guide/en/draft-review.png',
     'docs/guide/guide.css',
     'docs/guide/guide.js',
   ].flatMap((file) =>

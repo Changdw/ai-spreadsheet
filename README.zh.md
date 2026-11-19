@@ -1,8 +1,8 @@
-# AIB · AI 表格工作台
+# AIB · 中文使用与开发指南
 
-[English](README.en.md)
+[产品首页](README.md) · [English](README.en.md)
 
-AIB 把整本工作簿保存为**一个 UTF-8 JSON 文件**。外部模型可以按范围读取数据、提出修改、检查差异并验证公式结果。浏览器工作台与 CLI 使用同一格式，基础计算和转换在本机运行。
+第一次使用？先看[工作台截图、预算改价示例和 120 万格实测](README.md)。配置好文件关联后，双击 `.aib` 就能开始编辑。外部模型和 CLI 可以直接处理同一个 UTF-8 JSON 工作簿。
 
 | 任务 | 入口 |
 | --- | --- |
@@ -32,7 +32,7 @@ npm run --silent aib -- --offline read examples/budget.aib --sheet "预算" --ra
 npm run --silent aib -- --offline draft examples/budget.aib --ops examples/change-budget.json
 ```
 
-示例合计为 **14100**。草稿可先审后用。把返回的 ID 交给 `diff`、`draft-validate` 和 `apply`。直接写入可带 `batch --expected-hash` 核对版本。工作表 ID、公式、带前导零的编号和日期类型都有明确字段。
+示例合计为 **14,100**。把草稿 ID 交给 `diff` 查看单价变动，运行 `draft-validate` 验证，再用 `apply` 应用。重新读取 D5，合计应为 **15,100**。直接写入可带 `batch --expected-hash` 核对版本。工作表 ID、公式、带前导零的编号和日期类型都有明确字段。
 
 **格式** · 支持导入和导出 Microsoft Excel 工作簿（.xlsx、.xls），也支持 CSV 导入、单表 CSV 导出和离线 HTML 导出。转换前请核对损失报告。
 
