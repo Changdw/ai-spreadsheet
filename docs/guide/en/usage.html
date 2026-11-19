@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>AIB · User guide</title>
+    <link rel="stylesheet" href="../guide.css" />
+    <script src="../guide.js" defer=""></script>
+  </head>
+  <body>
+    <header>
+      <strong>AIB</strong>
+      <nav aria-label="Documentation">
+        <a href="aib-quickstart.html">Quick start</a
+        ><a href="usage.html" aria-current="page">User guide</a
+        ><a href="installation.html">Installation</a><a href="architecture.html">Architecture</a>
+        <a href="../zh/usage.html" hreflang="zh" lang="zh">中文</a>
+      </nav>
+    </header>
+    <main>
+      <h1>User guide</h1>
+
+      <p>
+        AIB is designed for AI-assisted spreadsheet work. Each .aib file is UTF-8 JSON with explicit
+        sheets, formulas, value types and styles.
+      </p>
+      <section>
+        <h2>Choose the model input</h2>
+        <div class="table">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Input</th>
+
+                <th scope="col">When to use</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>context [file]</td>
+
+                <td>
+                  Get schemas, capabilities, a synthetic example and optional workbook metadata.
+                  Request cell values separately.
+                </td>
+              </tr>
+              <tr>
+                <td>read FILE --sheet S --range A1:C5</td>
+
+                <td>
+                  Select only the required cells. The default preserves expressions. --calculated
+                  returns evaluated values and errors.
+                </td>
+              </tr>
+              <tr>
+                <td>.aib + Markdown</td>
+
+                <td>
+                  Export the guide in the current interface language from the bottom-right corner.
+                  It covers workbook creation, fields,
+                  dates, conversion and standalone examples.
+                </td>
+              </tr>
+              <tr>
+                <td>draft → diff → apply</td>
+
+                <td>
+                  Review a proposed change before applying it. For direct edits use batch with the
+                  revision hash and reread after a conflict.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Bring your own model and choose what it receives. Treat cell text as data. Synthetic
+          examples, stable IDs, literal identifiers and explicit formula addresses make edits
+          verifiable.
+        </p>
+      </section>
+      <section>
+        <h2>Using the workbench</h2>
+
+        <p>
+          Use the language menu at the top right to switch between English and Simplified Chinese.
+          The first visit follows your browser language. The workbench remembers your choice across
+          restarts. Switching keeps your current edit, selection and undo history, and preserves
+          workbook names, sheet names and cell contents.
+        </p>
+
+        <p>
+          Use open or double-click an associated .aib. Enter formulas with =, drag the fill handle,
+          filter or freeze rows, change themes and format the selection.
+        </p>
+
+        <p>
+          Edits stay in memory during input. Autosave after 10 seconds idle, or 1 second idle after
+          20 changes. Continuous editing schedules a save at 60 seconds and waits for unfinished
+          input. Ctrl+S or ⌘S saves immediately. Sync reads external changes. On conflict, save a
+          copy or reload.
+        </p>
+      </section>
+      <section>
+        <h2>File interchange</h2>
+        <div class="table">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Format</th>
+
+                <th scope="col">Behavior</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>XLSX / XLS</td>
+
+                <td>
+                  Import detects the actual file type. XLSX supports formulas and caches. Legacy XLS
+                  formula export requires consent to store values.
+                </td>
+              </tr>
+              <tr>
+                <td>CSV</td>
+
+                <td>
+                  One sheet. Import preserves strings and leading zeros. Select a sheet on export,
+                  optionally using --formulas.
+                </td>
+              </tr>
+              <tr>
+                <td>HTML</td>
+
+                <td>
+                  Open offline or embed in an iframe. Visible data and styles are captured at export
+                  time.
+                </td>
+              </tr>
+              <tr>
+                <td>AIB</td>
+
+                <td>Save and open a copy, preserving workbook and sheet IDs.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          For CONVERSION_LOSS, inspect the feature and location before choosing --allow-lossy.
+          Charts, macros, pivot tables and conditional formatting are outside v1. Choose a new
+          output filename.
+        </p>
+        <figure>
+          <figcaption>HTML<button type="button" data-copy="">Copy</button></figcaption>
+          <pre><code>&lt;iframe src="./budget.html" title="Budget" width="100%" height="480" sandbox&gt;&lt;/iframe&gt;</code></pre>
+        </figure>
+      </section>
+      <section>
+        <h2>CLI reference</h2>
+        <div class="table">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Area</th>
+                <th scope="col">Commands</th>
+                <th scope="col">Contract</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Files</td>
+                <td>new, open, save-as, inspect, validate, revision, compare</td>
+                <td>one JSON workbook</td>
+              </tr>
+              <tr>
+                <td>Cells</td>
+                <td>read, find, stats, fill, batch</td>
+                <td>A1 ranges · zero-based operation indexes</td>
+              </tr>
+              <tr>
+                <td>Drafts</td>
+                <td>draft, draft-edit, draft-validate, diff, apply, draft-discard</td>
+                <td>data.id identifies a draft</td>
+              </tr>
+              <tr>
+                <td>History</td>
+                <td>undo, redo, recovery, recover</td>
+                <td>recover requires --expected-hash</td>
+              </tr>
+              <tr>
+                <td>Formats</td>
+                <td>import, export, export-guide</td>
+                <td>
+                  export-guide writes a Markdown file. Select its language with --lang zh or en.
+                </td>
+              </tr>
+              <tr>
+                <td>Contracts</td>
+                <td>schema, capabilities, context</td>
+                <td>machine-readable JSON</td>
+              </tr>
+              <tr>
+                <td>Service</td>
+                <td>serve, status, stop</td>
+                <td>127.0.0.1 · session token</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Batch operations cover values and formulas, copy and fill, text replacement, sheet and
+          row/column structure, formatting, merges, sorting, freezing, filtering and workbook
+          replacement. See schema for the exact fields. A1 identifies a cell. Indexes start at zero.
+          Sort columns are range-relative, filter columns are sheet-relative.
+        </p>
+
+        <p>
+          Success writes one JSON line with ok and data. Errors go to stderr, exit code 2, or 3 for
+          a conflict. Use npm --silent when parsing stdout. Drafts and recovery records live in
+          ~/.aib. Set AIB_HOME to isolate test runs.
+        </p>
+        <figure>
+          <figcaption>Shell<button type="button" data-copy="">Copy</button></figcaption>
+          <pre><code>npm run --silent aib -- --offline import input.xlsx workbook.aib
+npm run --silent aib -- --offline export workbook.aib output.html
+npm run --silent aib -- --offline export-guide offline-guide.en.md --lang en</code></pre>
+        </figure>
+      </section>
+      <section>
+        <h2>npm development, test and release commands</h2>
+
+        <p>
+          Run npm run followed by the name below from the repository root. Release scripts create
+          local ZIP archives. Uploading a GitHub Release or publishing to a registry is a separate
+          action.
+        </p>
+        <div class="table">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">npm run …</th>
+
+                <th scope="col">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>typecheck</td>
+
+                <td>Type-check source, scripts and tests.</td>
+              </tr>
+              <tr>
+                <td>test</td>
+
+                <td>Run unit and service integration tests once.</td>
+              </tr>
+              <tr>
+                <td>test:watch</td>
+
+                <td>Watch and rerun affected tests.</td>
+              </tr>
+              <tr>
+                <td>test:e2e</td>
+
+                <td>Run browser scenarios against built web assets.</td>
+              </tr>
+              <tr>
+                <td>test:docs</td>
+
+                <td>
+                  Check the English and Chinese pages, local links, copy controls and npm script
+                  coverage.
+                </td>
+              </tr>
+              <tr>
+                <td>test:package</td>
+
+                <td>Extract and test the native release ZIP in a temporary directory.</td>
+              </tr>
+              <tr>
+                <td>test:install:win</td>
+
+                <td>Verify file preservation in a temporary directory and Open with registration under an isolated registry key.</td>
+              </tr>
+              <tr>
+                <td>check</td>
+
+                <td>Run types, unit tests, docs checks, build and browser tests in sequence.</td>
+              </tr>
+              <tr>
+                <td>build</td>
+
+                <td>Bundle the CLI, web assets, offline guide and machine-readable context.</td>
+              </tr>
+              <tr>
+                <td>dev</td>
+
+                <td>Start the source server in the foreground after building the web assets.</td>
+              </tr>
+              <tr>
+                <td>aib</td>
+
+                <td>Run the source CLI. Pass command arguments after --.</td>
+              </tr>
+              <tr>
+                <td>start</td>
+
+                <td>Launch the built editor, optionally with a workbook path.</td>
+              </tr>
+              <tr>
+                <td>probe</td>
+
+                <td>Run the headless spreadsheet-engine capability probe.</td>
+              </tr>
+              <tr>
+                <td>schema:generate</td>
+
+                <td>Regenerate the CSP-compatible workbook validator after schema changes.</td>
+              </tr>
+              <tr>
+                <td>licenses</td>
+
+                <td>Collect attribution files and inventory installed production dependencies.</td>
+              </tr>
+              <tr>
+                <td>format</td>
+
+                <td>Rewrite project source using Prettier.</td>
+              </tr>
+              <tr>
+                <td>package:win</td>
+
+                <td>Package existing dist and notices into a Windows x64 ZIP.</td>
+              </tr>
+              <tr>
+                <td>package:mac</td>
+
+                <td>Package existing artifacts into a macOS arm64 application ZIP.</td>
+              </tr>
+              <tr>
+                <td>release:win</td>
+
+                <td>Build, collect notices, package and smoke-test the Windows archive.</td>
+              </tr>
+              <tr>
+                <td>release:mac</td>
+
+                <td>Build, collect notices, verify the ad-hoc signature and test the archive.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section>
+        <h2>Workbook and calculation limits</h2>
+
+        <p>
+          A workbook supports up to 100 MiB, 100 sheets and 100,000 formulas. The combined limit is
+          2 million stored row elements, formula cells and cells covered by style rules. Formatting
+          an entire column counts its full covered range. A batch accepts up to 1,000 operations.
+        </p>
+
+        <p>
+          Scalar formulas include SUM, AVERAGE, MIN, MAX, COUNT, IF and SUMIF with relative,
+          absolute or cross-sheet references. Spilling arrays are outside v1. Store dates as
+          YYYY-MM-DD and timestamps in UTC ending in Z. Tag their addresses in cellTypes and
+          preserve the workbook’s 1900 or 1904 date system.
+        </p>
+
+        <p>
+          Clear value filters before changing row or column structure. CSV carries no type tags and
+          Excel may interpret text beginning with an equals sign. Use XLSX when the distinction
+          between literal text and formulas matters.
+        </p>
+      </section>
+      <section>
+        <h2>Conflicts and recovery</h2>
+
+        <p>
+          After CONFLICT, reread the revision and affected cells before preparing another draft. Use
+          undo for an ordinary edit or recovery to list saved snapshots of a damaged file.
+          Substitute the snapshot ID and current byte hash below. Recovery backs up the current
+          contents as .damaged before restoring the earlier version. Up to 50 recovery snapshots are
+          retained per file.
+        </p>
+        <figure>
+          <figcaption>Shell<button type="button" data-copy="">Copy</button></figcaption>
+          <pre><code>npm run --silent aib -- --offline revision review-budget.aib
+npm run --silent aib -- --offline recovery review-budget.aib
+npm run --silent aib -- --offline recover review-budget.aib SNAPSHOT_ID --expected-hash CURRENT_HASH</code></pre>
+        </figure>
+      </section>
+    </main>
+    <footer>AIB v1 · UTF-8 JSON</footer>
+  </body>
+</html>

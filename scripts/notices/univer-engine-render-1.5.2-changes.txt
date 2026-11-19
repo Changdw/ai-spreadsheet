@@ -1,0 +1,11 @@
+AIB build changes to @univerjs/engine-render 1.5.2
+
+AIB removes the document auto-hyphenation dictionary loaders, the embedded
+US English dictionary and its preload from both the browser and CLI bundles.
+The spreadsheet renderer uses its ordinary line breaker. Upstream's rendering
+code retains its Apache-2.0 license. HYPHEN-LICENSE.txt accompanies the
+hyphen-derived code retained in the renderer.
+
+Upstream source and acknowledgments:
+https://github.com/dream-num/univer/tree/v1.5.2/packages/engine-render/src/components/docs/layout/hyphenation
+https://github.com/ytiurin/hyphen/blob/v1.10.3/LICENSE

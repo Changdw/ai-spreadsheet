@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>AIB · 使用说明</title>
+    <link rel="stylesheet" href="../guide.css" />
+    <script src="../guide.js" defer=""></script>
+  </head>
+  <body>
+    <header>
+      <strong>AIB</strong>
+      <nav aria-label="文档">
+        <a href="aib-quickstart.html">快速上手</a
+        ><a href="usage.html" aria-current="page">使用说明</a
+        ><a href="installation.html">安装环境</a><a href="architecture.html">架构</a>
+        <a href="../en/usage.html" hreflang="en" lang="en">English</a>
+      </nav>
+    </header>
+    <main>
+      <h1>使用说明</h1>
+      <p>
+        AIB 的首要目标是让模型能读、写、复核表格。一个 .aib 文件是 UTF-8
+        JSON，工作表、公式、类型与样式都有明确字段。
+      </p>
+
+      <section>
+        <h2>选择模型要读的内容</h2>
+        <div class="table">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">输入</th>
+                <th scope="col">何时使用</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>context [file]</td>
+                <td>查询 schema、能力、合成示例及可选的文件元数据。需要数据时再按范围读。</td>
+              </tr>
+              <tr>
+                <td>read FILE --sheet S --range A1:C5</td>
+                <td>只交付任务所需范围。默认保留公式，加 --calculated 取计算值和错误清单。</td>
+              </tr>
+              <tr>
+                <td>.aib + Markdown</td>
+                <td>
+                  工作台右下角的「导出离线处理指南」会按当前界面语言导出 Markdown，包含从零建表、字段、日期、格式转换和代码示例。
+                </td>
+              </tr>
+              <tr>
+                <td>draft → diff → apply</td>
+                <td>对照差异审阅 AI 修改。直接编辑使用 batch --expected-hash，冲突后重新读取。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          工作台提供外部模型接口。你选择哪些内容交给模型。单元格里的文本作为表格数据处理。合成示例、稳定
+          ID、带前导零的字符串和明确的公式位置都有助于验证改动。
+        </p>
+      </section>
+      <section>
+        <h2>浏览器工作台</h2>
+        <p>
+          右上角的语言菜单可在简体中文与 English
+          之间切换。首次打开跟随浏览器语言，之后记住手动选择。切换时可以继续编辑当前单元格，保留选区和撤销记录。工作簿、工作表和单元格中的文字按原样显示。
+        </p>
+
+        <p>
+          用 open 或双击已关联的 .aib 打开。公式栏接受 =
+          开头的表达式。可拖动填充柄、筛选、冻结、切换主题，并使用跟随选区的格式工具。
+        </p>
+
+        <p>
+          编辑先存在内存。停顿 10 秒自动保存，累计 20 次更改后停顿 1 秒保存。持续编辑每 60
+          秒安排保存，正在输入时顺延。Ctrl+S 或 ⌘S
+          立即保存。外部改动用「同步」读取，出现冲突可保存副本或重新载入。
+        </p>
+      </section>
+      <section>
+        <h2>文件互换</h2>
+        <div class="table">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">格式</th>
+                <th scope="col">行为</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>XLSX / XLS</td>
+                <td>导入会按内容识别。XLSX 可含公式和缓存，旧 XLS 导出公式时需确认转换为值。</td>
+              </tr>
+              <tr>
+                <td>CSV</td>
+                <td>单表。导入保留字符串与前导零。导出指定工作表，可选 --formulas。</td>
+              </tr>
+              <tr>
+                <td>HTML</td>
+                <td>可断网双击查看，或嵌入 iframe。样式和可见数据是导出时的快照。</td>
+              </tr>
+              <tr>
+                <td>AIB</td>
+                <td>另存副本后打开副本。保留工作簿和工作表 ID。</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          遇到 CONVERSION_LOSS 时查看功能和位置，评估后决定是否使用
+          --allow-lossy。图表、宏、透视表和条件格式等超出 v1 的范围。目标文件需使用新文件名。
+        </p>
+
+        <figure>
+          <figcaption>HTML<button type="button" data-copy="">复制</button></figcaption>
+          <pre><code>&lt;iframe src="./budget.html" title="Budget" width="100%" height="480" sandbox&gt;&lt;/iframe&gt;</code></pre>
+        </figure>
+      </section>
+      <section>
+        <h2>CLI 命令</h2>
+        <div class="table">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">用途</th>
+                <th scope="col">命令</th>
+                <th scope="col">约定</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>文件</td>
+                <td>new, open, save-as, inspect, validate, revision, compare</td>
+                <td>单文件 JSON</td>
+              </tr>
+              <tr>
+                <td>范围</td>
+                <td>read, find, stats, fill, batch</td>
+                <td>区域使用 A1 地址，操作下标从 0 开始</td>
+              </tr>
+              <tr>
+                <td>草稿</td>
+                <td>draft, draft-edit, draft-validate, diff, apply, draft-discard</td>
+                <td>data.id 是草稿 ID</td>
+              </tr>
+              <tr>
+                <td>历史</td>
+                <td>undo, redo, recovery, recover</td>
+                <td>recover 需要 --expected-hash</td>
+              </tr>
+              <tr>
+                <td>转换</td>
+                <td>import, export, export-guide</td>
+                <td>export-guide 导出独立 Markdown，--lang zh 或 en 选择语言</td>
+              </tr>
+              <tr>
+                <td>接口</td>
+                <td>schema, capabilities, context</td>
+                <td>机器可读的 JSON</td>
+              </tr>
+              <tr>
+                <td>服务</td>
+                <td>serve, status, stop</td>
+                <td>127.0.0.1 与会话令牌</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          batch 的操作包括
+          set、formula、clear、copy、fill、replaceText、sheet.*、rows.*、columns.*、style、merge、unmerge、sort、freeze、filter
+          和 replace。schema 给出逐项参数。表内地址用 A1，行列下标从 0 开始，sort.column
+          相对选区，filter.column 相对整表。
+        </p>
+
+        <p>
+          成功输出一行 JSON，包含 ok 和 data。失败在 stderr 输出错误，退出码 2，版本冲突退出码
+          3。npm 调用加 --silent 便于 JSON 解析。草稿与恢复记录默认位于用户目录 .aib，可用 AIB_HOME
+          隔离测试。
+        </p>
+
+        <figure>
+          <figcaption>Shell<button type="button" data-copy="">复制</button></figcaption>
+          <pre><code>npm run --silent aib -- --offline import input.xlsx workbook.aib
+npm run --silent aib -- --offline export workbook.aib output.html
+npm run --silent aib -- --offline export-guide offline-guide.zh.md --lang zh</code></pre>
+        </figure>
+      </section>
+      <section>
+        <h2>npm 开发、测试与发布命令</h2>
+        <p>
+          在仓库根目录执行 npm run 加下表名称。release 命令在本地生成 ZIP。GitHub Release 上传和 npm
+          注册表发布均需另行操作。
+        </p>
+
+        <div class="table">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">npm run …</th>
+                <th scope="col">说明</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>typecheck</td>
+                <td>执行严格 TypeScript 检查</td>
+              </tr>
+              <tr>
+                <td>test</td>
+                <td>运行 Vitest 单元与服务集成测试</td>
+              </tr>
+              <tr>
+                <td>test:watch</td>
+                <td>监听文件变化并重跑相关测试</td>
+              </tr>
+              <tr>
+                <td>test:e2e</td>
+                <td>使用构建好的 Web 资源在真实浏览器中测试</td>
+              </tr>
+              <tr>
+                <td>test:docs</td>
+                <td>校验中、英文档、文档链接、复制按钮与 npm 清单</td>
+              </tr>
+              <tr>
+                <td>test:package</td>
+                <td>在临时目录解压并测试本平台的发行 ZIP</td>
+              </tr>
+              <tr>
+                <td>test:install:win</td>
+                <td>在临时目录验证安装与卸载的文件保护，在隔离注册表项验证「打开方式」与默认应用</td>
+              </tr>
+              <tr>
+                <td>check</td>
+                <td>依次执行类型、单元、文档、构建和浏览器测试</td>
+              </tr>
+              <tr>
+                <td>build</td>
+                <td>生成 dist/cli.cjs、Web 资源、AI 指南和上下文</td>
+              </tr>
+              <tr>
+                <td>dev</td>
+                <td>以前台模式启动源码后台。先构建 Web 资源</td>
+              </tr>
+              <tr>
+                <td>aib</td>
+                <td>运行源码 CLI。用 -- 传递 CLI 参数</td>
+              </tr>
+              <tr>
+                <td>start</td>
+                <td>从 dist 打开本地编辑器。可追加文件路径</td>
+              </tr>
+              <tr>
+                <td>probe</td>
+                <td>运行无界面电子表格引擎探针</td>
+              </tr>
+              <tr>
+                <td>schema:generate</td>
+                <td>更新浏览器使用的预编译校验器</td>
+              </tr>
+              <tr>
+                <td>licenses</td>
+                <td>收集已安装生产依赖的许可证材料和清单</td>
+              </tr>
+              <tr>
+                <td>format</td>
+                <td>用 Prettier 原地格式化项目源码</td>
+              </tr>
+              <tr>
+                <td>package:win</td>
+                <td>用现有 dist 和许可证材料打 Windows x64 ZIP</td>
+              </tr>
+              <tr>
+                <td>package:mac</td>
+                <td>在 Apple Silicon 上打 macOS 应用 ZIP</td>
+              </tr>
+              <tr>
+                <td>release:win</td>
+                <td>构建、收集许可证、打 Windows 包并验证 ZIP</td>
+              </tr>
+              <tr>
+                <td>release:mac</td>
+                <td>构建、收集许可证、检查签名并验证 macOS 包</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section>
+        <h2>文件与计算边界</h2>
+        <p>
+          每个工作簿最多 100 MiB、100 张工作表和 10
+          万个公式。数据行占用的元素数、公式数、样式规则覆盖的格数合计最多 200
+          万。样式应用到整列也按覆盖的格数计入。每个 batch 最多 1000 项操作。
+        </p>
+
+        <p>
+          常用标量公式包括 SUM、AVERAGE、MIN、MAX、COUNT、IF 和
+          SUMIF，可使用相对、绝对或跨表引用。v1 不支持溢出数组。日期写作 YYYY-MM-DD，时间写作以 Z
+          结尾的 UTC 字符串，并在 cellTypes 标记类型。导入时保留工作簿的 1900 或 1904 日期系统。
+        </p>
+
+        <p>
+          增删行列前先清除值筛选。CSV 缺少类型标记，Excel
+          打开时可能解释以等号开头的文本；需要保持文本与公式的区别时使用 XLSX。
+        </p>
+      </section>
+      <section>
+        <h2>冲突与恢复</h2>
+        <p>
+          CLI 收到 CONFLICT 后，重新读取 revision
+          和受影响区域，核对更改，再生成草稿。需要回退单次修改可用 undo；文件损坏时，recovery
+          列出可恢复记录。恢复前取当前字节的哈希，将下面的 SNAPSHOT_ID 和 CURRENT_HASH
+          换成实际值。恢复会先将当前内容备份为 .damaged。每个文件保留最近 50 个恢复快照。
+        </p>
+
+        <figure>
+          <figcaption>Shell<button type="button" data-copy="">复制</button></figcaption>
+          <pre><code>npm run --silent aib -- --offline revision review-budget.aib
+npm run --silent aib -- --offline recovery review-budget.aib
+npm run --silent aib -- --offline recover review-budget.aib SNAPSHOT_ID --expected-hash CURRENT_HASH</code></pre>
+        </figure>
+      </section>
+    </main>
+    <footer>AIB v1 · UTF-8 JSON</footer>
+  </body>
+</html>

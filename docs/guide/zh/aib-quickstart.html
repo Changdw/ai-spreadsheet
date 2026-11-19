@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>AIB · 快速上手</title>
+    <link rel="stylesheet" href="../guide.css" />
+    <script src="../guide.js" defer=""></script>
+  </head>
+  <body>
+    <header>
+      <strong>AIB</strong>
+      <nav aria-label="文档">
+        <a href="aib-quickstart.html" aria-current="page">快速上手</a
+        ><a href="usage.html">使用说明</a><a href="installation.html">安装环境</a
+        ><a href="architecture.html">架构</a>
+        <a href="../en/aib-quickstart.html" hreflang="en" lang="en">English</a>
+      </nav>
+    </header>
+    <main>
+      <h1>快速上手</h1>
+      <p>用自带的预算表走一遍从 AI 草稿到 Excel 的流程。以下命令在源码仓库根目录执行。</p>
+
+      <section>
+        <h2>准备并打开</h2>
+        <p>
+          安装 Node.js 24 和 npm 后运行下列命令。Windows 便携版已包含运行环境，解压后双击 AIB.exe
+          即可。
+        </p>
+
+        <figure>
+          <figcaption>Shell<button type="button" data-copy="">复制</button></figcaption>
+          <pre><code>npm ci
+npm run build
+npm run aib -- save-as examples/budget.aib review-budget.aib
+npm run aib -- open review-budget.aib</code></pre>
+        </figure>
+      </section>
+      <section>
+        <h2>让模型读取需要的范围</h2>
+        <p>
+          context 给出两个 schema、能力、合成示例，以及指定工作簿的表名、ID、尺寸和版本哈希。read
+          单独取目标单元格。预算的 D5 应为 14100。
+        </p>
+
+        <figure>
+          <figcaption>Shell<button type="button" data-copy="">复制</button></figcaption>
+          <pre><code>npm run --silent aib -- --offline context review-budget.aib
+npm run --silent aib -- --offline read review-budget.aib --sheet "预算" --range D5 --calculated</code></pre>
+        </figure>
+      </section>
+      <section>
+        <h2>审核改动</h2>
+        <p>
+          示例操作把预算表 C3 的单价改为 2000。draft 返回 data.id。将第二段命令中的 DRAFT_ID
+          替换为该值，核对差异后应用。
+        </p>
+
+        <figure>
+          <figcaption>Shell<button type="button" data-copy="">复制</button></figcaption>
+          <pre><code>npm run --silent aib -- --offline draft review-budget.aib --ops examples/change-budget.json</code></pre>
+        </figure>
+        <figure>
+          <figcaption>Shell<button type="button" data-copy="">复制</button></figcaption>
+          <pre><code>npm run --silent aib -- --offline diff DRAFT_ID
+npm run --silent aib -- --offline draft-validate DRAFT_ID
+npm run --silent aib -- --offline apply DRAFT_ID</code></pre>
+        </figure>
+      </section>
+      <section>
+        <h2>验证并导出</h2>
+        <p>
+          D5 现在应为 15100。workbench 中点击「同步」读取 CLI 的改动。导出的 HTML
+          可双击查看。重复操作请使用新的导出文件名。
+        </p>
+
+        <figure>
+          <figcaption>Shell<button type="button" data-copy="">复制</button></figcaption>
+          <pre><code>npm run --silent aib -- --offline read review-budget.aib --sheet "预算" --range D5 --calculated
+npm run --silent aib -- --offline export review-budget.aib budget.xlsx
+npm run --silent aib -- --offline export review-budget.aib budget.html</code></pre>
+        </figure>
+      </section>
+    </main>
+    <footer>AIB v1 · UTF-8 JSON</footer>
+  </body>
+</html>

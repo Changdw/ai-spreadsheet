@@ -1,0 +1,47 @@
+---
+config:
+  theme: neutral
+  htmlLabels: false
+  fontFamily: "Segoe UI, Microsoft YaHei, sans-serif"
+  themeVariables:
+    fontFamily: "Segoe UI, Microsoft YaHei, sans-serif"
+    fontSize: "16px"
+    lineColor: "#486456"
+  flowchart:
+    htmlLabels: false
+    curve: monotoneY
+    nodeSpacing: 28
+    rankSpacing: 32
+    padding: 12
+---
+%% From this directory: mmdc -i architecture.mmd -o architecture.svg -b "#f6f7f2"
+flowchart TB
+    accTitle: AIB workbook architecture
+    accDescr: The browser submits edits through the local HTTP server. The CLI can use local RPC or call the workbook service offline. The service coordinates workbook operations, conversion and transactional storage.
+
+    web["Browser workbench<br/>Univer in-memory editor"]
+    cli["CLI<br/>User or external AI"]
+    server["Local HTTP server<br/>apps/server"]
+    service["Workbook service<br/>packages/service"]
+    compute["Cell and formula engine<br/>core · univer-adapter"]
+    store["Transactional storage<br/>packages/storage"]
+    codec["Format conversion<br/>packages/conversion"]
+    book[(".aib workbook<br/>UTF-8 JSON")]
+    state[("AIB_HOME<br/>Drafts, history, recovery")]
+
+    web -->|Save and sync| server
+    cli -->|Local RPC| server
+    cli -->|--offline| service
+    server --> service
+    service --> compute
+    service --> store
+    service --> codec
+    store -->|Schema validation| book
+    store --> state
+
+    classDef module rx:5,ry:5,fill:#ffffff,stroke:#698073,color:#223a32;
+    classDef shared rx:5,ry:5,fill:#dff1e7,stroke:#136445,stroke-width:2px,color:#16452f;
+    classDef file fill:#f0f4ee,stroke:#698073,color:#223a32;
+    class web,cli,server,compute,store,codec module;
+    class service shared;
+    class book,state file;

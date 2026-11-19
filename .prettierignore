@@ -1,0 +1,12 @@
+references
+node_modules
+docs/design
+docs/plan
+docs/release
+dist
+release
+.tools
+.verification
+.tmp
+package-lock.json
+packages/schema/validator.js

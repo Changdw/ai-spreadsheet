@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>AIB · Quick start</title>
+    <link rel="stylesheet" href="../guide.css" />
+    <script src="../guide.js" defer=""></script>
+  </head>
+  <body>
+    <header>
+      <strong>AIB</strong>
+      <nav aria-label="Documentation">
+        <a href="aib-quickstart.html" aria-current="page">Quick start</a
+        ><a href="usage.html">User guide</a><a href="installation.html">Installation</a
+        ><a href="architecture.html">Architecture</a>
+        <a href="../zh/aib-quickstart.html" hreflang="zh" lang="zh">中文</a>
+      </nav>
+    </header>
+    <main>
+      <h1>Quick start</h1>
+
+      <p>
+        Use the sample budget to go from an AI draft to an Excel workbook. Run these commands from
+        the source checkout.
+      </p>
+      <section>
+        <h2>Build and open</h2>
+
+        <p>
+          Install Node.js 24 with npm. The Windows portable edition bundles its runtime: extract it
+          and double-click AIB.exe.
+        </p>
+        <figure>
+          <figcaption>Shell<button type="button" data-copy="">Copy</button></figcaption>
+          <pre><code>npm ci
+npm run build
+npm run aib -- save-as examples/budget.aib review-budget.aib
+npm run aib -- open review-budget.aib</code></pre>
+        </figure>
+      </section>
+      <section>
+        <h2>Read just enough context</h2>
+
+        <p>
+          context returns both schemas, capabilities, a synthetic example, and metadata for the
+          named workbook. read retrieves the selected cells. D5 starts at 14100.
+        </p>
+        <figure>
+          <figcaption>Shell<button type="button" data-copy="">Copy</button></figcaption>
+          <pre><code>npm run --silent aib -- --offline context review-budget.aib
+npm run --silent aib -- --offline read review-budget.aib --sheet "预算" --range D5 --calculated</code></pre>
+        </figure>
+      </section>
+      <section>
+        <h2>Review the change</h2>
+
+        <p>
+          The sample changes the unit price in C3 to 2000. Replace DRAFT_ID below with data.id from
+          draft. Inspect the diff before applying it.
+        </p>
+        <figure>
+          <figcaption>Shell<button type="button" data-copy="">Copy</button></figcaption>
+          <pre><code>npm run --silent aib -- --offline draft review-budget.aib --ops examples/change-budget.json</code></pre>
+        </figure>
+        <figure>
+          <figcaption>Shell<button type="button" data-copy="">Copy</button></figcaption>
+          <pre><code>npm run --silent aib -- --offline diff DRAFT_ID
+npm run --silent aib -- --offline draft-validate DRAFT_ID
+npm run --silent aib -- --offline apply DRAFT_ID</code></pre>
+        </figure>
+      </section>
+      <section>
+        <h2>Verify and export</h2>
+
+        <p>
+          D5 should now be 15100. Click Sync in an open editor to load CLI changes. Open the HTML
+          snapshot in a browser. Use fresh output filenames when repeating the example.
+        </p>
+        <figure>
+          <figcaption>Shell<button type="button" data-copy="">Copy</button></figcaption>
+          <pre><code>npm run --silent aib -- --offline read review-budget.aib --sheet "预算" --range D5 --calculated
+npm run --silent aib -- --offline export review-budget.aib budget.xlsx
+npm run --silent aib -- --offline export review-budget.aib budget.html</code></pre>
+        </figure>
+      </section>
+    </main>
+    <footer>AIB v1 · UTF-8 JSON</footer>
+  </body>
+</html>

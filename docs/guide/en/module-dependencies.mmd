@@ -1,0 +1,64 @@
+---
+config:
+  theme: neutral
+  htmlLabels: false
+  fontFamily: "Segoe UI, Microsoft YaHei, sans-serif"
+  themeVariables:
+    fontFamily: "Segoe UI, Microsoft YaHei, sans-serif"
+    fontSize: "16px"
+    lineColor: "#486456"
+  flowchart:
+    htmlLabels: false
+    curve: monotoneY
+    nodeSpacing: 28
+    rankSpacing: 28
+    padding: 12
+---
+%% From this directory: mmdc -i module-dependencies.mmd -o module-dependencies.svg -b "#f6f7f2"
+flowchart TB
+    accTitle: AIB module dependencies
+    accDescr: The launcher invokes the CLI, and the web editor calls the server over HTTP. The service uses storage and conversion, which both depend on core. Core maps workbooks through univer-adapter. Schema defines the underlying data contract.
+
+    launcher["apps/launcher<br/>Desktop launcher"]
+    cli["apps/cli<br/>Command line"]
+    web["apps/web<br/>Web editor"]
+    server["apps/server<br/>Local HTTP server"]
+    resources["apps/resources.ts<br/>Guide export"]
+    language["apps/language.ts<br/>Locale selection"]
+
+    service["packages/service<br/>Command dispatch"]
+    storage["packages/storage<br/>Transactions and recovery"]
+    conversion["packages/conversion<br/>Format conversion"]
+    core["packages/core<br/>Workbook operations"]
+    adapter["packages/univer-adapter<br/>Snapshot and style mapping"]
+    schema["packages/schema<br/>Format and validation"]
+
+    launcher -.->|cli open| cli
+    web -.->|HTTP| server
+    cli --> server
+    cli --> service
+    server --> service
+    server --> storage
+    web --> adapter
+    cli --> resources
+    server --> resources
+    resources --> language
+    web --> language
+    service --> storage
+    service --> conversion
+    service --> core
+    storage --> core
+    conversion --> core
+    core --> adapter
+    service --> adapter
+    service --> schema
+    conversion --> adapter
+    conversion --> schema
+    storage --> schema
+    core --> schema
+    adapter --> schema
+
+    classDef module rx:5,ry:5,fill:#ffffff,stroke:#698073,color:#223a32;
+    classDef contract rx:5,ry:5,fill:#dff1e7,stroke:#136445,stroke-width:2px,color:#16452f;
+    class launcher,cli,web,server,resources,language,storage,conversion,core,adapter module;
+    class service,schema contract;

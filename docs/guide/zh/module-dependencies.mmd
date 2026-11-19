@@ -1,0 +1,64 @@
+---
+config:
+  theme: neutral
+  htmlLabels: false
+  fontFamily: "Segoe UI, Microsoft YaHei, sans-serif"
+  themeVariables:
+    fontFamily: "Segoe UI, Microsoft YaHei, sans-serif"
+    fontSize: "16px"
+    lineColor: "#486456"
+  flowchart:
+    htmlLabels: false
+    curve: monotoneY
+    nodeSpacing: 28
+    rankSpacing: 28
+    padding: 12
+---
+%% 在本目录运行：mmdc -i module-dependencies.mmd -o module-dependencies.svg -b "#f6f7f2"
+flowchart TB
+    accTitle: AIB 模块依赖关系
+    accDescr: 桌面启动器调用 CLI，工作台经 HTTP 访问 server。service 使用 storage 和 conversion，两者都依赖 core；core 通过 univer-adapter 映射工作簿，schema 定义底层数据契约。
+
+    launcher["apps/launcher<br/>桌面启动"]
+    cli["apps/cli<br/>命令行"]
+    web["apps/web<br/>浏览器工作台"]
+    server["apps/server<br/>本地 HTTP 服务"]
+    resources["apps/resources.ts<br/>指南导出"]
+    language["apps/language.ts<br/>语言选择"]
+
+    service["packages/service<br/>命令分派"]
+    storage["packages/storage<br/>事务与恢复"]
+    conversion["packages/conversion<br/>格式转换"]
+    core["packages/core<br/>工作簿运算"]
+    adapter["packages/univer-adapter<br/>快照与样式映射"]
+    schema["packages/schema<br/>文件契约与校验"]
+
+    launcher -.->|cli open| cli
+    web -.->|HTTP| server
+    cli --> server
+    cli --> service
+    server --> service
+    server --> storage
+    web --> adapter
+    cli --> resources
+    server --> resources
+    resources --> language
+    web --> language
+    service --> storage
+    service --> conversion
+    service --> core
+    storage --> core
+    conversion --> core
+    core --> adapter
+    service --> adapter
+    service --> schema
+    conversion --> adapter
+    conversion --> schema
+    storage --> schema
+    core --> schema
+    adapter --> schema
+
+    classDef module rx:5,ry:5,fill:#ffffff,stroke:#698073,color:#223a32;
+    classDef contract rx:5,ry:5,fill:#dff1e7,stroke:#136445,stroke-width:2px,color:#16452f;
+    class launcher,cli,web,server,resources,language,storage,conversion,core,adapter module;
+    class service,schema contract;

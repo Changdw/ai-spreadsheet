@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+<key>CFBundleIdentifier</key><string>local.aib.workbook</string>
+<key>CFBundleName</key><string>AIB</string><key>CFBundleDisplayName</key><string>AIB</string>
+<key>CFBundleIconFile</key><string>AIB.icns</string>
+<key>CFBundleExecutable</key><string>AIB</string><key>CFBundlePackageType</key><string>APPL</string>
+<key>CFBundleShortVersionString</key><string>0.1.0</string><key>CFBundleVersion</key><string>1</string>
+<key>LSMinimumSystemVersion</key><string>13.0</string><key>LSUIElement</key><true/>
+<key>CFBundleDocumentTypes</key><array><dict><key>CFBundleTypeName</key><string>AIB Workbook</string><key>CFBundleTypeIconFile</key><string>AIB.icns</string><key>CFBundleTypeRole</key><string>Editor</string><key>LSHandlerRank</key><string>Alternate</string><key>LSItemContentTypes</key><array><string>local.aib.workbook.json</string></array></dict></array>
+<key>UTExportedTypeDeclarations</key><array><dict><key>UTTypeIdentifier</key><string>local.aib.workbook.json</string><key>UTTypeDescription</key><string>AIB JSON Workbook</string><key>UTTypeConformsTo</key><array><string>public.json</string></array><key>UTTypeTagSpecification</key><dict><key>public.filename-extension</key><array><string>aib</string></array><key>public.mime-type</key><string>application/vnd.aib+json</string></dict></dict></array>
+</dict></plist>

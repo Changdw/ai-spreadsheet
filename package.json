@@ -1,0 +1,73 @@
+{
+  "name": "aib-local-workbook",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "dev": "tsx apps/cli/main.ts serve",
+    "build": "tsx scripts/build.ts",
+    "aib": "tsx apps/cli/main.ts",
+    "probe": "tsx scripts/probe-engine.ts",
+    "test:e2e": "playwright test",
+    "schema:generate": "tsx scripts/generate-schema.ts",
+    "licenses": "tsx scripts/licenses.ts",
+    "package:win": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/package-win.ps1",
+    "format": "prettier --write apps packages scripts tests *.ts *.json",
+    "start": "node dist/cli.cjs open",
+    "test:docs": "tsx scripts/check-docs.ts",
+    "test:package": "tsx scripts/verify-package.ts",
+    "check": "npm run typecheck && npm test && npm run test:docs && npm run build && npm run test:e2e",
+    "package:mac": "bash scripts/package-mac.sh",
+    "release:win": "npm run build && npm run licenses && npm run package:win && npm run test:package",
+    "release:mac": "npm run build && npm run licenses && npm run package:mac && npm run test:package",
+    "test:install:win": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify-install-win.ps1 -FilesOnly"
+  },
+  "dependencies": {
+    "@univerjs/core": "1.5.2",
+    "@univerjs/engine-formula": "1.5.2",
+    "@univerjs/preset-sheets-core": "1.5.2",
+    "@univerjs/presets": "1.5.2",
+    "@univerjs/sheets": "1.5.2",
+    "@univerjs/sheets-formula": "1.5.2",
+    "@univerjs/sheets-numfmt": "1.5.2",
+    "@univerjs/sheets-sort": "1.5.2",
+    "ajv": "8.20.0",
+    "commander": "15.1.0",
+    "csv-parse": "7.0.3",
+    "csv-stringify": "6.9.0",
+    "exceljs": "4.4.0",
+    "express": "5.3.0",
+    "proper-lockfile": "4.1.2",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz",
+    "yauzl": "3.4.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.1",
+    "@types/express": "5.0.6",
+    "@types/node": "26.6.6",
+    "@types/proper-lockfile": "4.1.4",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@types/yauzl": "3.4.0",
+    "esbuild": "0.28.2",
+    "prettier": "3.10.1",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "vite": "8.3.8",
+    "vitest": "5.1.0"
+  },
+  "overrides": {
+    "exceljs": {
+      "uuid": "11.1.1"
+    }
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,162 @@
+:root {
+  color-scheme: light dark;
+  --paper: #f6f7f2;
+  --card: #fff;
+  --ink: #223a32;
+  --line: #cdd9d0;
+  --green: #136445;
+  --muted: #485f55;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  line-height: 1.6;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #14221c;
+    --card: #192d24;
+    --ink: #e9f3ec;
+    --line: #43594e;
+    --green: #95dfb6;
+    --muted: #bdcec2;
+  }
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+}
+header,
+main,
+footer {
+  max-width: 1040px;
+  margin: auto;
+  padding: 18px clamp(16px, 4vw, 56px);
+}
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  border-bottom: 1px solid var(--line);
+}
+nav {
+  display: flex;
+  gap: 6px 14px;
+  flex-wrap: wrap;
+}
+nav a {
+  font-size: 0.83rem;
+}
+a {
+  color: var(--green);
+  text-underline-offset: 0.2em;
+}
+a[aria-current] {
+  font-weight: 700;
+}
+h1 {
+  font:
+    600 clamp(2rem, 5vw, 3.3rem)/1.14 Georgia,
+    serif;
+  margin: 0.5em 0;
+}
+h2 {
+  font-size: 1.35rem;
+  margin: 0 0 12px;
+}
+p {
+  margin: 0.45em 0;
+}
+section {
+  margin: 22px 0;
+  padding: 20px 24px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--card);
+}
+.table {
+  overflow-x: auto;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  text-align: left;
+}
+th,
+td {
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+  padding: 8px;
+}
+td:first-child {
+  font-weight: 600;
+}
+pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin: 0;
+  padding: 12px 14px;
+}
+code {
+  font-family: Consolas, monospace;
+}
+figure {
+  margin: 12px 0;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+}
+figcaption {
+  padding: 4px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+}
+button {
+  font: inherit;
+  color: var(--green);
+  background: var(--card);
+  border: 1px solid var(--line);
+  padding: 2px 8px;
+  cursor: pointer;
+}
+footer {
+  color: var(--muted);
+  font-size: small;
+}
+.architecture-diagram {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #f6f7f2;
+}
+.architecture-diagram img {
+  display: block;
+  width: 100%;
+  min-width: 580px;
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 12px;
+}
+#module-dependencies img {
+  max-width: 980px;
+  min-width: 780px;
+}
+.diagram-links {
+  margin: 6px 0 14px;
+  font-size: 0.875rem;
+}
+@media (max-width: 640px) {
+  header {
+    display: block;
+  }
+  section {
+    padding: 12px;
+  }
+  td,
+  th {
+    padding: 5px;
+  }
+}

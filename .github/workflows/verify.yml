@@ -1,0 +1,64 @@
+# Adapted from GitHub's Node.js CI starter workflow for AIB's two desktop targets.
+name: AIB CI
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  verify:
+    name: Verify and package (${{ matrix.os }})
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-15]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run test:docs
+      - run: npm test
+      - run: npm run build
+      - run: npm run licenses
+      - if: runner.os == 'macOS'
+        run: npx playwright install chromium
+      - run: npm run test:e2e
+      - if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $version = node --version
+          $license = Join-Path $env:RUNNER_TEMP 'NODE-LICENSE.txt'
+          Invoke-WebRequest "https://raw.githubusercontent.com/nodejs/node/$version/LICENSE" -OutFile $license
+          $env:AIB_NODE_LICENSE = $license
+          npm run package:win
+      - if: runner.os == 'Windows'
+        name: Test installer, Open with registration and launcher on a clean runner
+        shell: powershell
+        run: ./scripts/verify-install-win.ps1
+      - if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          version="$(node --version)"
+          mkdir -p .tmp
+          curl --fail --location "https://nodejs.org/dist/$version/SHASUMS256.txt" -o .tmp/SHASUMS256.txt
+          curl --fail --location "https://nodejs.org/dist/$version/node-$version-darwin-arm64.tar.gz" -o ".tmp/node-$version-darwin-arm64.tar.gz"
+          (cd .tmp && grep " node-$version-darwin-arm64.tar.gz$" SHASUMS256.txt | shasum -a 256 -c -)
+          tar -xzf ".tmp/node-$version-darwin-arm64.tar.gz" -C .tmp
+          AIB_NODE_PATH="$PWD/.tmp/node-$version-darwin-arm64/bin/node" AIB_NODE_LICENSE="$PWD/.tmp/node-$version-darwin-arm64/LICENSE" bash scripts/package-mac.sh
+      - run: npm run test:package
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: aib-${{ runner.os }}
+          path: release/*.zip
+          if-no-files-found: error

@@ -1,0 +1,47 @@
+---
+config:
+  theme: neutral
+  htmlLabels: false
+  fontFamily: "Segoe UI, Microsoft YaHei, sans-serif"
+  themeVariables:
+    fontFamily: "Segoe UI, Microsoft YaHei, sans-serif"
+    fontSize: "16px"
+    lineColor: "#486456"
+  flowchart:
+    htmlLabels: false
+    curve: monotoneY
+    nodeSpacing: 28
+    rankSpacing: 32
+    padding: 12
+---
+%% 在本目录运行：mmdc -i architecture.mmd -o architecture.svg -b "#f6f7f2"
+flowchart TB
+    accTitle: AIB 工作簿架构
+    accDescr: 浏览器通过本地 HTTP 服务提交编辑。CLI 可以走本地 RPC，也可离线调用工作簿服务。工作簿服务协调计算、转换和事务存储。
+
+    web["浏览器工作台<br/>Univer 内存编辑器"]
+    cli["CLI<br/>用户或外部 AI"]
+    server["本地 HTTP 服务<br/>apps/server"]
+    service["工作簿命令分派<br/>packages/service"]
+    compute["单元格操作与公式<br/>core · univer-adapter"]
+    store["事务存储<br/>packages/storage"]
+    codec["格式转换<br/>packages/conversion"]
+    book[(".aib 工作簿<br/>UTF-8 JSON")]
+    state[("AIB_HOME<br/>草稿、历史与恢复记录")]
+
+    web -->|保存、同步| server
+    cli -->|本地 RPC| server
+    cli -->|--offline| service
+    server --> service
+    service --> compute
+    service --> store
+    service --> codec
+    store -->|schema 校验| book
+    store --> state
+
+    classDef module rx:5,ry:5,fill:#ffffff,stroke:#698073,color:#223a32;
+    classDef shared rx:5,ry:5,fill:#dff1e7,stroke:#136445,stroke-width:2px,color:#16452f;
+    classDef file fill:#f0f4ee,stroke:#698073,color:#223a32;
+    class web,cli,server,compute,store,codec module;
+    class service shared;
+    class book,state file;

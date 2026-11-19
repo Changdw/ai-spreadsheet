@@ -1,0 +1,33 @@
+{
+  "name": "AIB spreadsheet with white hexagram Ai mark",
+  "version": 5,
+  "vectorComposition": "aib.svg",
+  "activeMaster": "aib.png",
+  "familyMark": {
+    "svg": "ai-family.svg",
+    "png": "ai-family.png"
+  },
+  "background": "Original clean spreadsheet plate from version 3, embedded in the composition",
+  "designHistory": {
+    "spreadsheetPlate": "The project generated the initial green spreadsheet tile on 2026-11-18 using image generation. A subsequent image edit removed its sparkle. The cleaned plate is embedded as a PNG in aib.svg.",
+    "familyMark": "The project used a user-supplied ornament photograph as a visual reference for the six-pointed star. ai-family.svg draws the two triangles and Ai lettering with paths, a circle and a rectangle. The photograph is not included in the artwork or distribution.",
+    "referenceRights": "The author and license of the reference photograph have not been established."
+  },
+  "sha256": {
+    "embeddedSpreadsheetPlatePng": "cb26b00b547951e4f27e4dfb94683b8e182be7d092b24672ed8e7633685fc8c1",
+    "ai-family.svg": "07dee0b0cbbf3a3757f365ec9fe74ba32cbf5a6cbaadedc12cb62c44fdb4e430",
+    "aib.png": "66e77a772b3a2135aa2a1e2a02ab0b55f151b442aeccbe108700feee12de9561"
+  },
+  "placement": {
+    "referenceCanvas": 1254,
+    "x": 715,
+    "y": 369,
+    "width": 208,
+    "height": 208
+  },
+  "exports": [
+    "aib.ico",
+    "aib.icns",
+    "aib-128.png"
+  ]
+}

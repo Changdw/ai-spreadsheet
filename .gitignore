@@ -1,0 +1,21 @@
+node_modules/
+dist/
+release/
+.tools/
+.tmp/
+.verification/
+test-results/
+playwright-report/
+/references/
+*.log
+.DS_Store
+
+# Private development history and local workbooks
+/docs/design/
+/docs/plan/
+/docs/release/
+/assets/brand/concepts/
+/assets/brand/*-v[0-9]*
+/examples/*
+!/examples/budget.aib
+!/examples/change-budget.json

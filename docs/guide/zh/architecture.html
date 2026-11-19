@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>AIB · 架构</title>
+    <link rel="stylesheet" href="../guide.css" />
+    <script src="../guide.js" defer=""></script>
+  </head>
+  <body>
+    <header>
+      <strong>AIB</strong>
+      <nav aria-label="文档">
+        <a href="aib-quickstart.html">快速上手</a><a href="usage.html">使用说明</a
+        ><a href="installation.html">安装环境</a
+        ><a href="architecture.html" aria-current="page">架构</a>
+        <a href="../en/architecture.html" hreflang="en" lang="en">English</a>
+      </nav>
+    </header>
+    <main>
+      <h1>架构</h1>
+      <p>
+        扩展 AIB 时先判断变更涉及文件格式、工作簿运算、持久化还是展示。公开格式属于 schema，CLI
+        和浏览器共用同一服务命令。
+      </p>
+
+      <section>
+        <h2>工作簿命令如何执行</h2>
+        <div class="architecture-diagram" role="region" aria-label="工作簿架构图" tabindex="0">
+          <img src="architecture.svg" alt="工作台通过本地 HTTP 服务提交内存编辑。CLI 可离线调用同一服务层，分派计算、存储和转换命令。" />
+        </div>
+        <p class="diagram-links">
+          <a href="architecture.svg">查看原图</a> ·
+          <a href="architecture.mmd" download>下载 Mermaid 源文件</a>
+        </p>
+        <p>
+          手动保存或自动保存时，工作台将内存中的改动和读取版本的哈希提交给服务端。存储模块在锁内应用操作、写恢复记录，并在替换工作簿前核对磁盘版本。格式转换模块读写 XLSX、XLS 和 CSV，也能从内存工作簿生成只读 HTML。
+        </p>
+      </section>
+      <section id="module-dependencies">
+        <h2>模块依赖关系</h2>
+        <p>箭头由使用方指向依赖方。实线表示直接导入，虚线表示跨进程调用。图中展示主要连接，下表列出各运行时模块的项目内直接依赖。</p>
+        <div class="architecture-diagram" role="region" aria-label="模块依赖关系" tabindex="0">
+          <img src="module-dependencies.svg" alt="桌面启动器调用 CLI，工作台经 HTTP 访问 server。service 使用 storage 和 conversion，两者都依赖 core；core 通过 univer-adapter 映射工作簿，schema 定义底层数据契约。" />
+        </div>
+        <p class="diagram-links">
+          <a href="module-dependencies.svg">查看原图</a> ·
+          <a href="module-dependencies.mmd" download>下载 Mermaid 源文件</a>
+        </p>
+      </section>
+      <section>
+        <h2>模块职责和边界</h2>
+        <div class="table">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">模块</th>
+                <th scope="col">职责和约束</th>
+                <th scope="col">项目内直接依赖</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>packages/schema</td>
+                <td>工作簿 JSON、字段、地址、容量与校验。纯数据规则可在浏览器运行。</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>packages/univer-adapter</td>
+                <td>AIB 与 Univer 快照、日期、样式、共享公式相互映射。输入输出均为内存对象。</td>
+                <td>schema</td>
+              </tr>
+              <tr>
+                <td>packages/core</td>
+                <td>
+                  operations.ts
+                  定义操作结构。引擎执行、填充、公式求值、范围读取和差异比较处理内存工作簿。
+                </td>
+                <td>schema、univer-adapter</td>
+              </tr>
+              <tr>
+                <td>packages/storage</td>
+                <td>
+                  唯一的原生工作簿事务写入边界。负责路径、原子替换、锁、哈希、草稿、撤销和恢复。
+                </td>
+                <td>schema、core</td>
+              </tr>
+              <tr>
+                <td>packages/conversion</td>
+                <td>解析 XLSX、XLS、CSV，生成导出字节和损失报告。HTML 只读渲染处理可见性。</td>
+                <td>schema、univer-adapter、core</td>
+              </tr>
+              <tr>
+                <td>packages/service</td>
+                <td>
+                  index.ts 分派命令。context.ts 发布 AI 契约，formats.ts 编排格式策略，request.ts
+                  定义请求和错误返回。
+                </td>
+                <td>schema、univer-adapter、core、storage、conversion</td>
+              </tr>
+              <tr>
+                <td>apps/cli</td>
+                <td>解析参数、stdin 和 JSON 输出。离线执行或通过本地 RPC 调用 service。</td>
+                <td>server、resources.ts、service、schema</td>
+              </tr>
+              <tr>
+                <td>apps/server</td>
+                <td>
+                  负责本机会话、文件选择器、打开工作簿、HTTP 和静态资源。listen.ts
+                  选择浏览器可访问的端口。
+                </td>
+                <td>resources.ts、language.ts、service、storage、schema</td>
+              </tr>
+              <tr>
+                <td>apps/web</td>
+                <td>
+                  主编辑器协调选择、输入、撤销和同步。api.ts 处理会话与请求，autosave.ts
+                  合并写盘，local-edits.ts 操作编辑器模型。
+                </td>
+                <td>language.ts、core（统计）、schema、univer-adapter。另引用 server/file-dialog 的类型。</td>
+              </tr>
+              <tr>
+                <td>apps/launcher</td>
+                <td>由系统文件关联启动工作台。</td>
+                <td>cli（子进程）</td>
+              </tr>
+              <tr>
+                <td>apps/resources.ts</td>
+                <td>按语言导出项目随附的离线指南。</td>
+                <td>language.ts, schema</td>
+              </tr>
+              <tr>
+                <td>apps/language.ts</td>
+                <td>定义支持的语言并解析语言偏好。</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>scripts · tests · skills</td>
+                <td>
+                  工具链构建和封装同一套资源。单元、浏览器和发行包测试走真实入口。skills
+                  包含给模型的离线说明。
+                </td>
+                <td>开发与分发工具</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section>
+        <h2>数据契约与失败处理</h2>
+        <p>
+          磁盘上的 revision 是文件字节的 SHA-256。CLI 写入和工作台保存使用同一路径锁与
+          expectedHash。非协作的外部写入者可以绕过锁，同时编辑同一文件时应使用 CLI
+          或草稿。恢复文件位于 AIB_HOME，而 .aib 只含工作簿。
+        </p>
+
+        <p>
+          模型使用 context 获取格式版本、操作 schema
+          和可选元数据。服务请求决定何时允许格式损失，转换器只报告实际问题。编辑字段、类型或容量时同步更新校验器、中、英文离线指南和对应回归测试。
+        </p>
+      </section>
+      <section>
+        <h2>扩展入口</h2>
+        <p>
+          新增操作时先更新 core/operations，再实现 core 行为，补充回归测试和
+          CLI/工作台入口。新增格式时添加 conversion 适配、service/formats 策略、capabilities
+          声明及往返测试。用 npm run check 验证依赖方向及文档命令。
+        </p>
+      </section>
+    </main>
+    <footer>AIB v1 · UTF-8 JSON</footer>
+  </body>
+</html>

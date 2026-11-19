@@ -1,0 +1,520 @@
+{
+  "format": "aib",
+  "formatVersion": 1,
+  "id": "aib-example-budget-v1",
+  "name": "月度预算",
+  "dateSystem": "1900",
+  "sheets": [
+    {
+      "id": "budget",
+      "name": "预算",
+      "dimensions": {
+        "rows": 200,
+        "columns": 16
+      },
+      "data": [
+        ["项目","数量","单价","金额"],
+        ["设计调研",2,1200,null,1,null],
+        ["原型开发",5,1800,null,2,null],
+        ["测试与验收",3,900,null,3,null],
+        ["合计",null,null,null,4,null],
+        [null,null,null,null,5,null],
+        [null,null,null,null,null,null]
+      ],
+      "formulas": {
+        "D2": "=B2*C2",
+        "F2": "=E2+E3",
+        "D3": "=B3*C3",
+        "F3": "=E3+E4",
+        "D4": "=B4*C4",
+        "F4": "=E4+E5",
+        "D5": "=SUM(D2:D4)",
+        "F5": "=E5+E6",
+        "F6": "=E6+E7",
+        "F7": "=E7+E8"
+      },
+      "cellTypes": {},
+      "styleRules": [
+        {
+          "range": "A1",
+          "style": {
+            "bold": true,
+            "color": "#FFFFFF",
+            "background": "#166E50"
+          }
+        },
+        {
+          "range": "B1",
+          "style": {
+            "bold": true,
+            "color": "#FFFFFF",
+            "background": "#166E50"
+          }
+        },
+        {
+          "range": "C1",
+          "style": {
+            "bold": true,
+            "color": "#FFFFFF",
+            "background": "#166E50"
+          }
+        },
+        {
+          "range": "D1",
+          "style": {
+            "bold": true,
+            "color": "#FFFFFF",
+            "background": "#166E50"
+          }
+        },
+        {
+          "range": "C2",
+          "style": {
+            "numberFormat": "¥#,##0.00"
+          }
+        },
+        {
+          "range": "D2",
+          "style": {
+            "numberFormat": "¥#,##0.00"
+          }
+        },
+        {
+          "range": "E2",
+          "style": {
+            "bold": false,
+            "italic": false,
+            "color": "#1B1C1F"
+          }
+        },
+        {
+          "range": "G2",
+          "style": {
+            "color": "#1B1C1F"
+          }
+        },
+        {
+          "range": "H2",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "C3",
+          "style": {
+            "numberFormat": "¥#,##0.00"
+          }
+        },
+        {
+          "range": "D3",
+          "style": {
+            "numberFormat": "¥#,##0.00"
+          }
+        },
+        {
+          "range": "E3",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "General"
+          }
+        },
+        {
+          "range": "G3",
+          "style": {
+            "color": "#1B1C1F"
+          }
+        },
+        {
+          "range": "H3",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "C4",
+          "style": {
+            "numberFormat": "¥#,##0.00"
+          }
+        },
+        {
+          "range": "D4",
+          "style": {
+            "numberFormat": "¥#,##0.00"
+          }
+        },
+        {
+          "range": "E4",
+          "style": {
+            "bold": false,
+            "italic": false,
+            "color": "#1B1C1F"
+          }
+        },
+        {
+          "range": "G4",
+          "style": {
+            "color": "#1B1C1F"
+          }
+        },
+        {
+          "range": "H4",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "A5",
+          "style": {
+            "bold": true,
+            "background": "#E8F3EC"
+          }
+        },
+        {
+          "range": "B5",
+          "style": {
+            "bold": true,
+            "background": "#E8F3EC"
+          }
+        },
+        {
+          "range": "C5",
+          "style": {
+            "bold": true,
+            "background": "#E8F3EC",
+            "numberFormat": "¥#,##0.00"
+          }
+        },
+        {
+          "range": "D5",
+          "style": {
+            "bold": true,
+            "background": "#E8F3EC",
+            "numberFormat": "¥#,##0.00"
+          }
+        },
+        {
+          "range": "E5",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "General"
+          }
+        },
+        {
+          "range": "G5",
+          "style": {
+            "color": "#1B1C1F"
+          }
+        },
+        {
+          "range": "H5",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "E6",
+          "style": {
+            "bold": false,
+            "italic": false,
+            "color": "#1B1C1F"
+          }
+        },
+        {
+          "range": "G6",
+          "style": {
+            "color": "#1B1C1F"
+          }
+        },
+        {
+          "range": "H6",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "H7",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "H8",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "H9",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "H10",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "H11",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "H12",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "H13",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "H14",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "H15",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "H16",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "H17",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "H18",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "H19",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "H20",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "H21",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "H22",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "H23",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "H24",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "H25",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "H26",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "H27",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "H28",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "H29",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "H30",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "H31",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "H32",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "H33",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        },
+        {
+          "range": "H34",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "m/d"
+          }
+        }
+      ],
+      "merges": [],
+      "freeze": {
+        "rows": 1,
+        "columns": 1
+      },
+      "rowMeta": {
+        "0": {
+          "size": 32
+        }
+      },
+      "columnMeta": {
+        "0": {
+          "size": 200
+        },
+        "1": {
+          "size": 90
+        },
+        "2": {
+          "size": 140
+        },
+        "3": {
+          "size": 160
+        }
+      },
+      "filter": null
+    },
+    {
+      "id": "summary",
+      "name": "汇总",
+      "dimensions": {
+        "rows": 100,
+        "columns": 26
+      },
+      "data": [
+        ["项目","值"],
+        ["总预算",null],
+        ["更新日期","2026-11-17",46338],
+        ["已审批",false],
+        ["备注","此文件为纯 JSON。可由 CLI、AI 或文本编辑器修改。"]
+      ],
+      "formulas": {
+        "B2": "='预算'!D5"
+      },
+      "cellTypes": {
+        "B3": "date"
+      },
+      "styleRules": [
+        {
+          "range": "B2",
+          "style": {
+            "numberFormat": "¥#,##0.00"
+          }
+        },
+        {
+          "range": "B3",
+          "style": {
+            "numberFormat": "yyyy-mm-dd"
+          }
+        },
+        {
+          "range": "C3",
+          "style": {
+            "color": "#1B1C1F",
+            "numberFormat": "mm/dd"
+          }
+        }
+      ],
+      "merges": [],
+      "freeze": {
+        "rows": 0,
+        "columns": 0
+      },
+      "rowMeta": {},
+      "columnMeta": {
+        "0": {
+          "size": 160
+        },
+        "1": {
+          "size": 430
+        }
+      },
+      "filter": null
+    }
+  ]
+}

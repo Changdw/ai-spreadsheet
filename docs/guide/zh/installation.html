@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>AIB · 安装环境</title>
+    <link rel="stylesheet" href="../guide.css" />
+    <script src="../guide.js" defer=""></script>
+  </head>
+  <body>
+    <header>
+      <strong>AIB</strong>
+      <nav aria-label="文档">
+        <a href="aib-quickstart.html">快速上手</a><a href="usage.html">使用说明</a
+        ><a href="installation.html" aria-current="page">安装环境</a
+        ><a href="architecture.html">架构</a>
+        <a href="../en/installation.html" hreflang="en" lang="en">English</a>
+      </nav>
+    </header>
+    <main>
+      <h1>安装环境</h1>
+      <p>便携包适合使用工作台。从源码开发和打包需要完整工具链。</p>
+
+      <section>
+        <h2>运行条件</h2>
+        <div class="table">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">平台</th>
+                <th scope="col">安装环境</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Windows x64</td>
+                <td>
+                  便携 ZIP 自带 Node。解压到可写目录，运行 AIB.exe。Install.ps1 注册当前用户的 .aib
+                  打开方式。默认应用由用户选择。
+                </td>
+              </tr>
+              <tr>
+                <td>macOS arm64</td>
+                <td>应用包需在 Apple Silicon 上构建；签名为 ad-hoc，尚未经 Apple 公证。在 Finder 的「打开方式」选择 AIB。要设为默认，在「显示简介 → 打开方式」选择 AIB，再点「全部更改」。</td>
+              </tr>
+              <tr>
+                <td>Linux 源码版</td>
+                <td>
+                  Node.js 24、npm、浏览器。原生文件窗口使用 zenity，默认浏览器通过 xdg-open 启动。
+                </td>
+              </tr>
+              <tr>
+                <td>开发</td>
+                <td>
+                  Node.js 24.x + 配套 npm，按 lockfile 安装。首次安装需要 npm registry 和 SheetJS 的
+                  CDN，之后离线 CLI 读取本地文件。
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <figure>
+          <figcaption>Shell<button type="button" data-copy="">复制</button></figcaption>
+          <pre><code>node --version
+npm --version
+npm ci
+npm run build
+npm start</code></pre>
+        </figure>
+      </section>
+      <section>
+        <h2>安装与卸载</h2>
+        <p>
+          在解压目录运行安装脚本，目标为当前用户
+          LocalAppData/Programs/AIB/0.1.0。在工作簿的「打开方式」中选 AIB.exe。要用 AIB 双击打开，请选「始终」。其他软件也使用 .aib 后缀，请先确认文件是 AIB JSON 工作簿。
+          卸载从安装目录运行 Uninstall.ps1。可在任意目录用完整路径调用 aib.cmd。
+        </p>
+
+        <figure>
+          <figcaption>PowerShell<button type="button" data-copy="">复制</button></figcaption>
+          <pre><code>powershell -NoProfile -ExecutionPolicy Bypass -File .\Install.ps1</code></pre>
+        </figure>
+      </section>
+      <section>
+        <h2>浏览器测试</h2>
+        <p>
+          Windows 测试使用 Edge，其他平台使用 Playwright
+          Chromium。先构建，再运行完整检查。浏览器测试使用独立临时目录。
+        </p>
+
+        <figure>
+          <figcaption>Shell<button type="button" data-copy="">复制</button></figcaption>
+          <pre><code>npx playwright install chromium
+npm run check</code></pre>
+        </figure>
+      </section>
+      <section>
+        <h2>制作本地发行包</h2>
+        <p>
+          Windows 需要 x64 Node 24、Windows PowerShell、.NET Framework 4.x 的 csc.exe 及匹配运行时的
+          LICENSE。默认在 node.exe 旁查找，也可用 AIB_NODE_LICENSE 指定。macOS 需要 Swift / Xcode
+          命令行工具、codesign、ditto 和同版 arm64 Node 的 LICENSE。
+        </p>
+
+        <figure>
+          <figcaption>Windows<button type="button" data-copy="">复制</button></figcaption>
+          <pre><code>npm run release:win</code></pre>
+        </figure>
+        <figure>
+          <figcaption>macOS<button type="button" data-copy="">复制</button></figcaption>
+          <pre><code>export AIB_NODE_LICENSE=/path/to/node-distribution/LICENSE
+npm run release:mac</code></pre>
+        </figure>
+        <p>
+          默认产物在 release/，AIB_RELEASE_DIR 可更改位置。每次打包都从干净的临时目录生成
+          ZIP。已有展开目录供当前使用者继续工作，获取新版请在新目录解压最新 ZIP。Mac 构建应在 Mac
+          上验证 Finder 打开。
+        </p>
+      </section>
+      <section>
+        <h2>诊断</h2>
+        <p>
+          CLI 找不到浏览器时先检查 build 产物。Windows 的 AIB.Browser.exe 与 cli.cjs
+          在同一目录。打开工作台请使用 open 获取会话。遇到端口或版本问题，先保存网页编辑，再运行
+          status、stop，然后重新 open。
+        </p>
+
+        <figure>
+          <figcaption>Shell<button type="button" data-copy="">复制</button></figcaption>
+          <pre><code>npm run --silent aib -- status
+npm run --silent aib -- open examples/budget.aib</code></pre>
+        </figure>
+      </section>
+    </main>
+    <footer>AIB v1 · UTF-8 JSON</footer>
+  </body>
+</html>

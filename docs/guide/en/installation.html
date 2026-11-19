@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>AIB · Installation</title>
+    <link rel="stylesheet" href="../guide.css" />
+    <script src="../guide.js" defer=""></script>
+  </head>
+  <body>
+    <header>
+      <strong>AIB</strong>
+      <nav aria-label="Documentation">
+        <a href="aib-quickstart.html">Quick start</a><a href="usage.html">User guide</a
+        ><a href="installation.html" aria-current="page">Installation</a
+        ><a href="architecture.html">Architecture</a>
+        <a href="../zh/installation.html" hreflang="zh" lang="zh">中文</a>
+      </nav>
+    </header>
+    <main>
+      <h1>Installation</h1>
+
+      <p>
+        Choose a portable package to use the workbench, or the source toolchain to develop and build
+        it.
+      </p>
+      <section>
+        <h2>Runtime requirements</h2>
+        <div class="table">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Platform</th>
+
+                <th scope="col">Environment</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Windows x64</td>
+
+                <td>
+                  The portable ZIP includes Node. Extract to a writable folder and run AIB.exe.
+                  Install.ps1 adds AIB to the current user’s Open with menu. The user chooses the default.
+                </td>
+              </tr>
+              <tr>
+                <td>macOS arm64</td>
+
+                <td>
+                  Build the app on Apple Silicon. The supplied packaging uses an ad-hoc signature
+                  without Apple notarization. In Finder, choose AIB under Open With. To make it the default, open Get Info, select AIB under Open With, then click Change All.
+                </td>
+              </tr>
+              <tr>
+                <td>Linux / source</td>
+
+                <td>
+                  Use Node.js 24, npm and a browser. Native dialogs require zenity and opening the
+                  default browser uses xdg-open.
+                </td>
+              </tr>
+              <tr>
+                <td>Development</td>
+
+                <td>
+                  Use Node.js 24.x and its npm, installing from the lockfile. Initial setup uses the
+                  npm registry and SheetJS CDN. Offline CLI commands then use local files.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <figure>
+          <figcaption>Shell<button type="button" data-copy="">Copy</button></figcaption>
+          <pre><code>node --version
+npm --version
+npm ci
+npm run build
+npm start</code></pre>
+        </figure>
+      </section>
+      <section>
+        <h2>Windows installation and removal</h2>
+
+        <p>
+          Run the installer inside the extracted directory. It installs to the current user’s
+          LocalAppData/Programs/AIB/0.1.0. Select AIB.exe under Open with. Choose Always to open workbooks in AIB by double-clicking. Other applications also use the .aib extension, so first confirm the file is an AIB JSON workbook.
+          Run Uninstall.ps1 from the installed directory. Invoke aib.cmd by its full path from other
+          folders.
+        </p>
+        <figure>
+          <figcaption>PowerShell<button type="button" data-copy="">Copy</button></figcaption>
+          <pre><code>powershell -NoProfile -ExecutionPolicy Bypass -File .\Install.ps1</code></pre>
+        </figure>
+      </section>
+      <section>
+        <h2>Browser tests</h2>
+
+        <p>
+          Windows tests use installed Edge. Install Playwright Chromium on other systems before
+          running checks. Browser tests use isolated temporary directories.
+        </p>
+        <figure>
+          <figcaption>Shell<button type="button" data-copy="">Copy</button></figcaption>
+          <pre><code>npx playwright install chromium
+npm run check</code></pre>
+        </figure>
+      </section>
+      <section>
+        <h2>Build a local release</h2>
+
+        <p>
+          Windows requires x64 Node 24, Windows PowerShell, the .NET Framework 4.x C# compiler and
+          the matching runtime LICENSE, next to node.exe or at AIB_NODE_LICENSE. macOS requires
+          Swift / Xcode command-line tools, codesign, ditto and the license of the matching arm64
+          Node distribution.
+        </p>
+        <figure>
+          <figcaption>Windows<button type="button" data-copy="">Copy</button></figcaption>
+          <pre><code>npm run release:win</code></pre>
+        </figure>
+        <figure>
+          <figcaption>macOS<button type="button" data-copy="">Copy</button></figcaption>
+          <pre><code>export AIB_NODE_LICENSE=/path/to/node-distribution/LICENSE
+npm run release:mac</code></pre>
+        </figure>
+
+        <p>
+          Archives are written to release/ or AIB_RELEASE_DIR. Every archive is built from a fresh
+          staging directory. Existing expanded directories are preserved. Extract the new ZIP into a
+          fresh folder to use it. Verify Finder opening on a Mac.
+        </p>
+      </section>
+      <section>
+        <h2>Troubleshooting</h2>
+
+        <p>
+          If browser launch fails, build first. On Windows AIB.Browser.exe sits beside cli.cjs. Use
+          open to establish an editor session. For a stale service, save your work, inspect status,
+          stop it, then reopen.
+        </p>
+        <figure>
+          <figcaption>Shell<button type="button" data-copy="">Copy</button></figcaption>
+          <pre><code>npm run --silent aib -- status
+npm run --silent aib -- open examples/budget.aib</code></pre>
+        </figure>
+      </section>
+    </main>
+    <footer>AIB v1 · UTF-8 JSON</footer>
+  </body>
+</html>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">白色六芒星，中央字标 Ai</title>
+  <g fill="none" stroke="#FFFFFF" stroke-width="16" stroke-linejoin="round">
+    <path d="M256 32 449.99 368H62.01Z"/>
+    <path d="M256 480 62.01 144h387.98Z"/>
+  </g>
+  <g fill="#FFFFFF" transform="translate(256 256) scale(.85) translate(-249 -252)">
+    <path fill-rule="evenodd" d="M166 310 214 194h25l48 116h-28l-9-24h-49l-9 24Zm44-47h32l-16-43Z"/>
+    <circle cx="319" cy="207" r="14"/>
+    <rect x="306" y="232" width="26" height="78" rx="3"/>
+  </g>
+</svg>

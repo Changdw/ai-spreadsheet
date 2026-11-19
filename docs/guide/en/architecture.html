@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>AIB · Architecture</title>
+    <link rel="stylesheet" href="../guide.css" />
+    <script src="../guide.js" defer=""></script>
+  </head>
+  <body>
+    <header>
+      <strong>AIB</strong>
+      <nav aria-label="Documentation">
+        <a href="aib-quickstart.html">Quick start</a><a href="usage.html">User guide</a
+        ><a href="installation.html">Installation</a
+        ><a href="architecture.html" aria-current="page">Architecture</a>
+        <a href="../zh/architecture.html" hreflang="zh" lang="zh">中文</a>
+      </nav>
+    </header>
+    <main>
+      <h1>Architecture</h1>
+
+      <p>
+        Choose the owner of a change first: file format, workbook operations, persistence or
+        presentation. The schema owns the public format. CLI and web share service commands.
+      </p>
+      <section>
+        <h2>How workbook commands run</h2>
+        <div class="architecture-diagram" role="region" aria-label="Workbook architecture diagram" tabindex="0">
+          <img src="architecture.svg" alt="The workbench submits in-memory edits through the local HTTP server. The offline CLI calls the same service layer to dispatch computation, storage and conversion commands." />
+        </div>
+        <p class="diagram-links">
+          <a href="architecture.svg">Open full-size diagram</a> ·
+          <a href="architecture.mmd" download>Download Mermaid source</a>
+        </p>
+
+        <p>
+          On manual save or autosave, the workbench submits its in-memory changes and the revision
+          hash from the last read. Storage applies operations under a lock, writes a recovery record
+          and rechecks the disk revision before replacing the workbook. The conversion module handles
+          XLSX, XLS and CSV interchange and can render a read-only HTML snapshot from memory.
+        </p>
+      </section>
+      <section id="module-dependencies">
+        <h2>Module dependencies</h2>
+        <p>Arrows point from a module to its dependency. Solid lines show direct imports. Dashed lines show calls across processes. The diagram highlights the main connections. The table lists the direct project dependencies of each runtime module.</p>
+        <div class="architecture-diagram" role="region" aria-label="Module dependencies" tabindex="0">
+          <img src="module-dependencies.svg" alt="The launcher invokes the CLI, and the web editor calls the server over HTTP. The service uses storage and conversion, which both depend on core. Core maps workbooks through univer-adapter. Schema defines the underlying data contract." />
+        </div>
+        <p class="diagram-links">
+          <a href="module-dependencies.svg">Open full-size diagram</a> ·
+          <a href="module-dependencies.mmd" download>Download Mermaid source</a>
+        </p>
+      </section>
+      <section>
+        <h2>Module ownership and boundaries</h2>
+        <div class="table">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">Module</th>
+
+                <th scope="col">Responsibility and boundary</th>
+                <th scope="col">Direct project dependencies</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>packages/schema</td>
+                <td>
+                  Owns workbook types, addresses, validation and capacity rules, portable across
+                  browser and Node.
+                </td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>packages/univer-adapter</td>
+                <td>
+                  Maps AIB to and from Univer snapshots, dates, styles and shared formulas in
+                  memory.
+                </td>
+                <td>schema</td>
+              </tr>
+              <tr>
+                <td>packages/core</td>
+                <td>
+                  operations.ts defines the operation contract. The engine edits, evaluates, reads
+                  and diffs in-memory workbooks.
+                </td>
+                <td>schema, univer-adapter</td>
+              </tr>
+              <tr>
+                <td>packages/storage</td>
+                <td>
+                  Owns native-workbook transactions, paths, atomic replacement, locks, revisions,
+                  drafts, undo and recovery.
+                </td>
+                <td>schema, core</td>
+              </tr>
+              <tr>
+                <td>packages/conversion</td>
+                <td>
+                  Decodes source formats and returns export bytes with loss reports. The offline
+                  HTML renderer honors visibility.
+                </td>
+                <td>schema, univer-adapter, core</td>
+              </tr>
+              <tr>
+                <td>packages/service</td>
+                <td>
+                  Dispatches commands. context.ts publishes the AI contract, formats.ts orchestrates
+                  conversion policy and request.ts defines request/error envelopes.
+                </td>
+                <td>schema, univer-adapter, core, storage, conversion</td>
+              </tr>
+              <tr>
+                <td>apps/cli</td>
+                <td>
+                  Parses arguments and stdin, emits JSON, and dispatches locally or through loopback
+                  RPC.
+                </td>
+                <td>server, resources.ts, service, schema</td>
+              </tr>
+              <tr>
+                <td>apps/server</td>
+                <td>
+                  Owns loopback sessions, OS dialogs, workbook registration, HTTP and static
+                  serving. listen.ts selects browser-accessible ports.
+                </td>
+                <td>resources.ts, language.ts, service, storage, schema</td>
+              </tr>
+              <tr>
+                <td>apps/web</td>
+                <td>
+                  Coordinates selection, input, history and synchronization. api.ts handles session
+                  requests, autosave.ts schedules saves, local-edits.ts manipulates the editor
+                  model.
+                </td>
+                <td>language.ts, core (statistics), schema, univer-adapter. Also imports a type from server/file-dialog.</td>
+              </tr>
+              <tr>
+                <td>apps/launcher</td>
+                <td>Starts the workbench through the OS file association.</td>
+                <td>cli (child process)</td>
+              </tr>
+              <tr>
+                <td>apps/resources.ts</td>
+                <td>Exports the bundled offline guide in the selected language.</td>
+                <td>language.ts, schema</td>
+              </tr>
+              <tr>
+                <td>apps/language.ts</td>
+                <td>Defines supported languages and resolves locale preferences.</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td>scripts · tests · skills</td>
+                <td>
+                  Tooling builds and stages distribution assets. Unit, browser and archive tests
+                  exercise public entry points. The skill supplies offline model guidance.
+                </td>
+                <td>Development and distribution tools</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section>
+        <h2>Data and failure contracts</h2>
+
+        <p>
+          A revision is the SHA-256 of disk bytes. CLI and editor writes share the same path lock
+          and expectedHash check. External programs can bypass advisory locks. Use the CLI or a
+          draft for coordinated writes. Recovery lives under AIB_HOME, separate from workbook
+          contents.
+        </p>
+
+        <p>
+          Models use context to obtain the version, operation schema and optional metadata. The
+          service decides whether conversion loss is accepted and codecs report actual issues.
+          Update the validator, English and Chinese guides and regression cases when changing
+          fields, types or limits.
+        </p>
+      </section>
+      <section>
+        <h2>Extension checklist</h2>
+
+        <p>
+          For a new operation update core/operations, engine behavior, regression coverage and the
+          relevant CLI/web entry point. For a new format add its codec, service policy, capability
+          declaration and round-trip test. npm run check verifies dependency directions and
+          documentation coverage.
+        </p>
+      </section>
+    </main>
+    <footer>AIB v1 · UTF-8 JSON</footer>
+  </body>
+</html>

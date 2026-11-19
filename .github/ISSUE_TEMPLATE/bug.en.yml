@@ -1,0 +1,24 @@
+name: "English · Bug report"
+description: Report a reproducible workbench, CLI or conversion problem.
+labels: [bug]
+body:
+  - type: input
+    id: environment
+    attributes:
+      label: Version and environment
+      placeholder: AIB version or commit, OS, and browser or Node.js version
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: List the steps or CLI commands. If a workbook is needed, a minimal synthetic example is best.
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true

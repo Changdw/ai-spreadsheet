@@ -1,0 +1,18 @@
+name: "中文 · 功能建议"
+description: 描述希望用 AIB 完成的任务。
+labels: [enhancement]
+body:
+  - type: textarea
+    id: usecase
+    attributes:
+      label: 使用场景
+      description: 你想完成什么任务？目前遇到了什么限制？
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: 期望的行为
+      description: 可以用一个工作台操作、CLI 命令或文件示例说明。
+    validations:
+      required: true
