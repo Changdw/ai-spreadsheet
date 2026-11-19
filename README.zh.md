@@ -1,4 +1,4 @@
-# AIB — 为 AI 设计的本地表格
+# AIB · AI 表格工作台
 
 [English](README.en.md)
 

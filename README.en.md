@@ -1,4 +1,4 @@
-# AIB — Spreadsheets designed for AI
+# AIB · AI Spreadsheet Workbench
 
 [中文](README.zh.md)
 
