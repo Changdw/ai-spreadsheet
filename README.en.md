@@ -1,6 +1,6 @@
 # AI Spreadsheet · A local spreadsheet built for AI
 
-[中文](README.md) · [![AIB CI](https://github.com/Changdw/ai-spreadsheet/actions/workflows/verify.yml/badge.svg?branch=main)](https://github.com/Changdw/ai-spreadsheet/actions/workflows/verify.yml)
+[简体中文](README.zh.md) · [![AIB CI](https://github.com/Changdw/ai-spreadsheet/actions/workflows/verify.yml/badge.svg?branch=main)](https://github.com/Changdw/ai-spreadsheet/actions/workflows/verify.yml)
 
 **Double-click a budget and you see cells and formulas. Give the same file to your AI assistant and it sees JSON.** One `.aib` holds the whole workbook. Drag to fill a column, format a price and let the local web editor autosave. Your agent can read just the cells it needs and leave you a draft to review.
 

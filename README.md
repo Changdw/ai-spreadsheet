@@ -1,27 +1,27 @@
-# AI Spreadsheet · 为 AI 设计的本地表格工作台
+# AI Spreadsheet · A local spreadsheet built for AI
 
-[English](README.en.md) · [中文使用与开发指南](README.zh.md) · [![AIB CI](https://github.com/Changdw/ai-spreadsheet/actions/workflows/verify.yml/badge.svg?branch=main)](https://github.com/Changdw/ai-spreadsheet/actions/workflows/verify.yml)
+[简体中文](README.zh.md) · [![AIB CI](https://github.com/Changdw/ai-spreadsheet/actions/workflows/verify.yml/badge.svg?branch=main)](https://github.com/Changdw/ai-spreadsheet/actions/workflows/verify.yml)
 
-**双击一份预算表，你看到的是单元格和公式。把同一个文件交给 AI，它读到的是 JSON。** 一份 `.aib` 就装下整本工作簿。你可以在本地浏览器里拖动填充、改格式，让工作台自动保存。也可以让自己的 AI 助手只读几格、起草修改，再由你决定是否应用。
+**Double-click a budget and you see cells and formulas. Give the same file to your AI assistant and it sees JSON.** One `.aib` holds the whole workbook. Drag to fill a column, format a price and let the local web editor autosave. Your agent can read just the cells it needs and leave you a draft to review.
 
-**[查看只读示例](https://changdw.github.io/ai-spreadsheet/)** · **[下载 Windows 版（x64）](https://github.com/Changdw/ai-spreadsheet/releases/latest/download/ai-spreadsheet-windows-x64.zip)** · **[下载 macOS 版（Apple 芯片）](https://github.com/Changdw/ai-spreadsheet/releases/latest/download/ai-spreadsheet-macos-arm64.zip)**
+**[View the read-only demo](https://changdw.github.io/ai-spreadsheet/en/)** · **[Download for Windows (x64)](https://github.com/Changdw/ai-spreadsheet/releases/latest/download/ai-spreadsheet-windows-x64.zip)** · **[Download for macOS (Apple silicon)](https://github.com/Changdw/ai-spreadsheet/releases/latest/download/ai-spreadsheet-macos-arm64.zip)**
 
-[![AIB 中文工作台中的月度预算。选中合计 D5 后，公式栏显示 =SUM(D2:D4)，表内显示 ¥15,100.00。](docs/guide/zh/workbench.png)](https://changdw.github.io/ai-spreadsheet/)
+[![Monthly budget in the English workbench. Cell D5 shows ¥15,100.00 and the formula bar shows =SUM(D2:D4).](docs/guide/en/workbench.png)](https://changdw.github.io/ai-spreadsheet/en/)
 
-[查看预算 JSON](examples/budget.aib) · [给 AI 的离线指南](skills/aib-workbook/references/zh/aib-offline.md)
+[See the budget as JSON](examples/budget.aib) · [Give your agent the offline guide](skills/aib-workbook/references/en/aib-offline.md)
 
-## 试试让 AI 改一次报价
+## Ask your agent to revise a quote
 
-> “把「原型开发」的单价从 1,800 调到 2,000，先给我看差异。”
+> “Raise the unit price for prototype development from 1,800 to 2,000. Show me the change first.”
 
-仓库里有这份预算和对应的[示例修改](examples/change-budget.json)。用 `aib draft` 生成草稿后，打开工作台的「AI 草稿」，就能看到 **预算!C3 的单价从 1,800 改为 2,000**。这是唯一一处修改，此时原表合计仍是 **14,100**。点击「应用这些修改」，5 件原型开发的预算随之增加 1,000，「预算」的合计与「汇总」的总预算一起变成 **15,100**。
+Try it with the sample budget and its [example edit](examples/change-budget.json). Run `aib draft`, then open **AI drafts**. The diff shows the price in **C3 changing from 1,800 to 2,000**, and the original total is still **14,100**. Click **Apply changes** and the five units add 1,000 to the budget. Both the total in D5 and the linked summary sheet now show **15,100**.
 
 <details>
-<summary>看草稿差异截图，自己生成同一份草稿</summary>
+<summary>See the draft and try the same edit</summary>
 
-![草稿审阅窗口显示原单价 1800 和新单价 2000，下方可点击「应用这些修改」。](docs/guide/zh/draft-review.png)
+![Draft review showing the previous price of 1800, the proposed price of 2000 and the Apply changes button.](docs/guide/en/draft-review.png)
 
-用工作台打开源码目录里的样表后，在同一目录运行下面的命令，再点击「AI 草稿」查看。
+Open the sample workbook from your source checkout in the workbench. In that checkout, run the following command, then click **AI drafts**.
 
 ```sh
 npm run --silent aib -- --offline draft examples/budget.aib --ops examples/change-budget.json
@@ -29,26 +29,26 @@ npm run --silent aib -- --offline draft examples/budget.aib --ops examples/chang
 
 </details>
 
-自己的助手也能走通这套流程。给它[离线指南](skills/aib-workbook/references/zh/aib-offline.md)，它就有了创建工作簿、读指定范围、提交草稿和验算公式的格式说明与命令。工作表、数据行、公式和样式都是同一份 UTF-8 文本里的字段，改动也能在 Git 里审阅。
+Hand the [offline guide](skills/aib-workbook/references/en/aib-offline.md) to your own agent. It covers creating a workbook, reading ranges, proposing edits and verifying calculated values. Sheets, data rows, formulas and styles are fields in a single UTF-8 text file, so you can review their changes in Git, too.
 
-## 一张 120 万格的表，AI 需要读多少？
+## How much of a 1.2-million-cell sheet does an agent need?
 
-| 我们实际做了什么 | 测到了什么 |
+| What we tried | What we measured |
 | --- | --- |
-| 在 10 万行 × 12 列的数字表里读取末尾六格 `J99999:L100000` | 整份文件 **9.59 MB**。CLI 返回的数值数组只有 **53 字节**，可以单独传给模型。 |
-| 在浏览器打开同一张表 | 本地服务已打开工作簿，从页面导航到表格可见，中位数 **2.29 秒**（3 次）。 |
-| 在另一张表计算 10,000 个 `SUM` 公式 | 公式引擎完成计算用时 **0.81 秒**（单次，单独计时）。 |
+| Read the last six cells, `J99999:L100000`, from a 100,000-row × 12-column numeric sheet | **9.59 MB** on disk. The values array returned by the CLI was **53 bytes** and can be passed directly to the model. |
+| Display the same workbook in the browser | **2.29 seconds** from navigation to a visible grid, with the workbook already open on the local server. Median of three runs. |
+| Calculate 10,000 `SUM` formulas in a separate workbook | **0.81 seconds** for the calculation step alone in one engine run. |
 
-53 字节是下面这个数组的 UTF-8 长度。完整 CLI 响应还带文件路径和版本哈希。
+The 53 bytes are the UTF-8 length of the array below. The full CLI response also includes the file path and revision hash.
 
 ```json
 [[1199985,1199986,1199987],[1199997,1199998,1199999]]
 ```
 
-测试环境为 Windows x64、Intel Core i9-14900HX、Node.js 24.22.3，浏览器使用 Edge。[样表生成与计算脚本](https://github.com/Changdw/ai-spreadsheet/blob/main/scripts/benchmark.ts) · [浏览器计时脚本](https://github.com/Changdw/ai-spreadsheet/blob/main/scripts/benchmark-ui.ts)
+Measured on Windows x64 with an Intel Core i9-14900HX, Node.js 24.22.3 and Edge. [Fixture and calculation script](https://github.com/Changdw/ai-spreadsheet/blob/main/scripts/benchmark.ts) · [Browser timing script](https://github.com/Changdw/ai-spreadsheet/blob/main/scripts/benchmark-ui.ts)
 
 <details>
-<summary>复现这次六格读取（在源码目录运行 npm ci 后执行）</summary>
+<summary>Reproduce the six-cell read after running npm ci in a source checkout</summary>
 
 ```sh
 node --import tsx scripts/benchmark.ts 100000 12 values
@@ -57,16 +57,34 @@ npm run --silent aib -- --offline read .verification/benchmark-values-100000.aib
 
 </details>
 
-## 第一次打开 AIB
+## Open your first workbook
 
-从上方选择系统对应的 ZIP 并解压。两个安装包都可以直接下载，无需登录 GitHub。[版本说明与校验值](https://github.com/Changdw/ai-spreadsheet/releases/latest)
+Choose your platform above and extract the ZIP. Both downloads work without signing in to GitHub. [Release notes and checksums](https://github.com/Changdw/ai-spreadsheet/releases/latest)
 
-| 平台 | 首次设置 |
+| Platform | One-time setup |
 | --- | --- |
-| Windows x64 | 在解压目录运行 `Install.ps1`，右键一份 `.aib` →「打开方式」→ 选择 `AIB.exe` →「始终」。 |
-| macOS（Apple 芯片） | 在 Finder 选中一份 `.aib` →「显示简介」→「打开方式」→ 选择 `AIB.app` →「全部更改」。 |
+| Windows x64 | Run `Install.ps1` in the extracted folder. Right-click an `.aib` workbook, choose **Open with**, select `AIB.exe` and choose **Always**. |
+| macOS on Apple silicon | Select an `.aib` in Finder. Under **Get Info → Open with**, choose `AIB.app`, then **Change All**. |
 
-现在双击一份 `.aib`，AIB 会自动启动本地工作台，在默认浏览器里打开这份表。想试试上面的预算？把[预算样表](examples/budget.aib)下载到自己的文档目录，双击即可。开发者也可以安装 Node.js 24，在源码目录直接运行下面三条命令。
+Now double-click an `.aib` file. AIB starts the local workbench and opens that workbook in your default browser. To try the example above, download the [sample budget](examples/budget.aib) to your documents folder and double-click it.
+
+**Bring an existing spreadsheet or share the result.** Import XLSX, XLS or CSV. Export an Excel workbook, a single sheet as CSV, or a read-only HTML snapshot that colleagues can open offline or embed in another page. The HTML opens without a running AIB server. [Format and conversion details](docs/guide/en/usage.html)
+
+## Documentation
+
+| Task | Entry point |
+| --- | --- |
+| Open and edit a budget | [Quick start](docs/guide/en/aib-quickstart.html) |
+| Use the workbench, CLI, npm tests and release scripts | [User guide](docs/guide/en/usage.html) |
+| Install, build and troubleshoot | [Installation](docs/guide/en/installation.html) |
+| Understand dependencies and file ownership | [Architecture](docs/guide/en/architecture.html) |
+| Give an agent the format and conversion recipes | [Offline Markdown guide](skills/aib-workbook/references/en/aib-offline.md) |
+
+Open the HTML documents locally after cloning.
+
+## Run from source
+
+Use Node.js 24.x with npm. Windows portable builds include the runtime.
 
 ```sh
 npm ci
@@ -74,6 +92,20 @@ npm run build
 npm run aib -- open examples/budget.aib
 ```
 
-**已有表格可以直接带进来。** 工作台和 CLI 都能导入 XLSX、XLS 和 CSV，导出时可选 XLSX、XLS 或单表 CSV。分享给同事时，还可以导出一份只读 HTML，双击就能看，也能嵌进项目文档。阅读这份 HTML 无需运行 AIB。[格式与转换说明](docs/guide/zh/usage.html)
+## Work with an agent
 
-[快速上手](docs/guide/zh/aib-quickstart.html) · [安装与排错](docs/guide/zh/installation.html) · [开发、测试与贡献](README.zh.md) · [MIT 许可证](LICENSE)
+```sh
+npm run --silent aib -- --offline context examples/budget.aib
+npm run --silent aib -- --offline read examples/budget.aib --sheet "预算" --range D5 --calculated
+npm run --silent aib -- --offline draft examples/budget.aib --ops examples/change-budget.json
+```
+
+Use the returned draft ID with `diff`, `draft-validate` and `apply`. Direct edits can supply `batch --expected-hash` to check the workbook revision. The sample's sheet name `预算` means “Budget”. The schema preserves sheet IDs, formulas and typed literals, including leading-zero identifiers. Check the conversion-loss report when exchanging files with other formats.
+
+**Development** · `npm run check` runs type, unit, documentation, build and browser checks. `npm run release:win` and `npm run release:mac` build local distribution archives on their respective platforms. Browser tests use Edge on Windows. Install Playwright Chromium on other platforms.
+
+**Contributing** · Open an issue for a bug or a feature request. To contribute a change, create a branch from `main` in your fork and open a pull request against `main`. Include the behavior change and how you tested it. AIB CI tests and packages the app on Windows x64 and macOS arm64. Each successful platform job attaches its ZIP to the Actions run.
+
+**License** · AIB’s own code uses the [MIT license](LICENSE). In the distribution archive, `dependencies.json` indexes the notices under `licenses/`. The Node.js notices are in `NODE-LICENSE.txt`. © 2026 AIB contributors.
+
+AIB is an independent project. Microsoft and Excel are trademarks of the Microsoft group of companies.
